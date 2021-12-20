@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package vientiane;
+
+option go_package = ".;vientiane";
+
+message HealthCheckReq {
+
+}
+
+message HealthCheckRes {
+
+}
+
+service VientianeService {
+  rpc HealthCheck(HealthCheckReq) returns (HealthCheckRes){};
+}
