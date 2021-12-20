@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"google.golang.org/grpc"
 	"log"
-	. "pub/idl/grpc"
+	"time"
+	vientiane "vientiane/pub/idl/grpc"
 )
 
 const (
@@ -17,7 +18,7 @@ var (
 	uri = fmt.Sprintf("%s:%d", domain, port)
 )
 
-func getClient() VientianeServiceClient {
+func getClient() vientiane.VientianeServiceClient {
 	conn, err := grpc.Dial(uri, grpc.WithInsecure())
 	if nil != err {
 		log.Fatalln(err)
@@ -25,14 +26,17 @@ func getClient() VientianeServiceClient {
 	}
 	defer conn.Close()
 
-	client := NewVientianeServiceClient(conn)
+	client := vientiane.NewVientianeServiceClient(conn)
 	return client
 }
 
-func HealthCheck(ctx context.Context, req *HealthCheckReq, options ...grpc.CallOption) (res *HealthCheckRes, err error) {
+func HealthCheckByGrpc(ctx context.Context, req *vientiane.HealthCheckReq, options ...grpc.CallOption) (res *vientiane.HealthCheckRes, err error) {
 	client := getClient()
 
-	res, err = client.HealthCheck(context.Background(), req)
+	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
+	defer cancel()
+
+	res, err = client.HealthCheck(ctx, req)
 	if nil != err {
 		log.Fatalln(err)
 		return
