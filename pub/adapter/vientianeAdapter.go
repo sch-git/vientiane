@@ -10,28 +10,28 @@ import (
 )
 
 const (
-	port   = 8899
+	Port   = 8899
 	domain = "localhost"
 )
 
 var (
-	uri = fmt.Sprintf("%s:%d", domain, port)
+	uri = fmt.Sprintf("%s:%d", domain, Port)
 )
 
-func getClient() vientiane.VientianeServiceClient {
+func getClient() (vientiane.VientianeServiceClient, *grpc.ClientConn) {
 	conn, err := grpc.Dial(uri, grpc.WithInsecure())
 	if nil != err {
 		log.Fatalln(err)
-		return nil
+		return nil, nil
 	}
-	defer conn.Close()
 
 	client := vientiane.NewVientianeServiceClient(conn)
-	return client
+	return client, conn
 }
 
 func HealthCheckByGrpc(ctx context.Context, req *vientiane.HealthCheckReq, options ...grpc.CallOption) (res *vientiane.HealthCheckRes, err error) {
-	client := getClient()
+	client, conn := getClient()
+	defer conn.Close()
 
 	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
 	defer cancel()

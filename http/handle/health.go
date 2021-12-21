@@ -9,7 +9,7 @@ import (
 func HandleHealth(r *gin.Engine, moduleName string) {
 	router := r.Group(moduleName)
 	getRouteConfigs := []RouteConfig{
-		{"/health", health.HealthCheckIn()},
+		{"/ping", health.HealthCheckIn()},
 	}
 
 	for _, conf := range getRouteConfigs {

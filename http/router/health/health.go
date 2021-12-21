@@ -13,7 +13,7 @@ type healthCheckReq struct {
 }
 
 func (m *healthCheckReq) Handle(ctx *gin.Context) {
-	_, err := adapter.HealthCheckByGrpc(ctx, m.req)
+	res, err := adapter.HealthCheckByGrpc(ctx, m.req)
 	if nil != err {
 		router.RespOK(ctx, &router.Result{
 			Message: "OK",
@@ -21,16 +21,19 @@ func (m *healthCheckReq) Handle(ctx *gin.Context) {
 		})
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"message": "pong",
-		"data":    "name",
+	router.RespOK(ctx, &router.Result{
+		Message: "OK",
+		Code:    200,
+		Data:    res,
 	})
 }
 
 func HealthCheckIn() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		m := &healthCheckReq{}
-		err := c.Bind(m)
+		m := &healthCheckReq{
+			req: &pub.HealthCheckReq{},
+		}
+		err := c.Bind(m.req)
 		if nil != err {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"err": err.Error(),

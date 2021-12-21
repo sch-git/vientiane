@@ -13,6 +13,7 @@ type RouteConfig struct {
 type Result struct {
 	Message string
 	Code    int
+	Data    interface{}
 }
 
 func RespOK(c *gin.Context, result *Result) {
