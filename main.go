@@ -2,8 +2,13 @@ package main
 
 import (
 	"fmt"
+<<<<<<< HEAD
 	"github.com/golang/glog"
 	"google.golang.org/grpc"
+=======
+	"google.golang.org/grpc"
+	"log"
+>>>>>>> master
 	"net"
 	"vientiane/pub/adapter"
 	vientiane "vientiane/pub/idl/grpc"
@@ -16,11 +21,19 @@ func main() {
 
 	listen, err := net.Listen("tcp", fmt.Sprintf(":%d", adapter.Port))
 	if nil != err {
+<<<<<<< HEAD
 		glog.Fatalln(err)
+=======
+		log.Fatalln(err)
+>>>>>>> master
 	}
 
 	err = grpcServer.Serve(listen)
 	if nil != err {
+<<<<<<< HEAD
 		glog.Fatalln(err)
+=======
+		log.Fatalln(err)
+>>>>>>> master
 	}
 }

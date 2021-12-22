@@ -8,4 +8,3 @@ type RouteConfig struct {
 	Path   string
 	Handle gin.HandlerFunc
 }
-
