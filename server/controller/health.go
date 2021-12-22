@@ -2,17 +2,21 @@ package controller
 
 import (
 	"context"
-	vientiane "vientiane/pub/idl/grpc"
+	. "vientiane/pub/idl/grpc"
 )
 
-type HealthController struct {
+type healthController struct {
 }
 
-func NewHealthController() *HealthController {
-	return &HealthController{}
+func NewHealthController() *healthController {
+	return &healthController{}
 }
 
-func (c *HealthController) HealthCheck(ctx context.Context, req *vientiane.HealthCheckReq) (res *vientiane.HealthCheckRes) {
-	res = &vientiane.HealthCheckRes{}
+func (c *healthController) HealthCheck(ctx context.Context, req *HealthCheckReq) (res *HealthCheckRes) {
+	res = &HealthCheckRes{
+		Data: &HealthCheckData{
+
+		},
+	}
 	return
 }

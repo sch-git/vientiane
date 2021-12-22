@@ -4,14 +4,56 @@ package vientiane;
 
 option go_package = ".;vientiane";
 
+// health
 message HealthCheckReq {
 
 }
 
-message HealthCheckRes {
+message HealthCheckData {
 
+}
+
+message HealthCheckRes {
+  int64 code = 1;
+  string msg = 2;
+  HealthCheckData data = 3;
+}
+
+// account
+message Account {
+  int64 id = 1;
+  string name = 2;
+  string password = 3;
+  string email = 4;
+  string updated_at = 5;
+  string created_at = 6;
+}
+
+// 新增账号
+
+// 删除账号
+
+// 修改账号
+
+// 列出账号
+
+// 账号详情
+message GetAccountReq {
+  int64 id = 1;
+}
+
+message GetAccountData {
+  Account account = 1;
+}
+
+message GetAccountRes {
+  int64 code = 1;
+  string msg = 2;
+  GetAccountData data = 3;
 }
 
 service VientianeService {
   rpc HealthCheck(HealthCheckReq) returns (HealthCheckRes){};
+  // account
+  rpc GetAccount(GetAccountReq) returns (GetAccountRes){};
 }

@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/golang/glog"
 	"google.golang.org/grpc"
-	"log"
 	"net"
 	"vientiane/pub/adapter"
 	vientiane "vientiane/pub/idl/grpc"
@@ -16,11 +16,11 @@ func main() {
 
 	listen, err := net.Listen("tcp", fmt.Sprintf(":%d", adapter.Port))
 	if nil != err {
-		log.Fatalln(err)
+		glog.Fatalln(err)
 	}
 
 	err = grpcServer.Serve(listen)
 	if nil != err {
-		log.Fatalln(err)
+		glog.Fatalln(err)
 	}
 }

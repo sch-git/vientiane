@@ -1,15 +1,15 @@
-package handle
+package router
 
 import (
 	"github.com/gin-gonic/gin"
-	. "vientiane/http/router"
-	"vientiane/http/router/health"
+	"vientiane/http/handle"
+	"vientiane/http/handle/health"
 )
 
 func HandleHealth(r *gin.Engine, moduleName string) {
 	router := r.Group(moduleName)
 	getRouteConfigs := []RouteConfig{
-		{"/ping", health.HealthCheckIn()},
+		{"/ping", handle.BindJsonWrapper(health.HealthCheck)},
 	}
 
 	for _, conf := range getRouteConfigs {
