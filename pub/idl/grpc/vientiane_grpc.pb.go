@@ -19,6 +19,8 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type VientianeServiceClient interface {
 	HealthCheck(ctx context.Context, in *HealthCheckReq, opts ...grpc.CallOption) (*HealthCheckRes, error)
+	// account
+	GetAccount(ctx context.Context, in *GetAccountReq, opts ...grpc.CallOption) (*GetAccountRes, error)
 }
 
 type vientianeServiceClient struct {
@@ -38,11 +40,22 @@ func (c *vientianeServiceClient) HealthCheck(ctx context.Context, in *HealthChec
 	return out, nil
 }
 
+func (c *vientianeServiceClient) GetAccount(ctx context.Context, in *GetAccountReq, opts ...grpc.CallOption) (*GetAccountRes, error) {
+	out := new(GetAccountRes)
+	err := c.cc.Invoke(ctx, "/vientiane.VientianeService/GetAccount", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // VientianeServiceServer is the server API for VientianeService service.
 // All implementations must embed UnimplementedVientianeServiceServer
 // for forward compatibility
 type VientianeServiceServer interface {
 	HealthCheck(context.Context, *HealthCheckReq) (*HealthCheckRes, error)
+	// account
+	GetAccount(context.Context, *GetAccountReq) (*GetAccountRes, error)
 	mustEmbedUnimplementedVientianeServiceServer()
 }
 
@@ -52,6 +65,9 @@ type UnimplementedVientianeServiceServer struct {
 
 func (UnimplementedVientianeServiceServer) HealthCheck(context.Context, *HealthCheckReq) (*HealthCheckRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HealthCheck not implemented")
+}
+func (UnimplementedVientianeServiceServer) GetAccount(context.Context, *GetAccountReq) (*GetAccountRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAccount not implemented")
 }
 func (UnimplementedVientianeServiceServer) mustEmbedUnimplementedVientianeServiceServer() {}
 
@@ -84,6 +100,24 @@ func _VientianeService_HealthCheck_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _VientianeService_GetAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAccountReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VientianeServiceServer).GetAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/vientiane.VientianeService/GetAccount",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VientianeServiceServer).GetAccount(ctx, req.(*GetAccountReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // VientianeService_ServiceDesc is the grpc.ServiceDesc for VientianeService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -95,7 +129,11 @@ var VientianeService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "HealthCheck",
 			Handler:    _VientianeService_HealthCheck_Handler,
 		},
+		{
+			MethodName: "GetAccount",
+			Handler:    _VientianeService_GetAccount_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "idl/vientiane.proto",
+	Metadata: "vientiane.proto",
 }
