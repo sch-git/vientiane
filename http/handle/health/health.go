@@ -14,13 +14,13 @@ type healthCheck struct {
 	pub.HealthCheckReq
 }
 
-func HealthCheck() handle.Handle {
+func FactoryHealthCheck() handle.Handle {
 	return new(healthCheck)
 }
 
 func (m *healthCheck) Handle(ctx *gin.Context) {
 	res, err := adapter.HealthCheckByGrpc(ctx, &m.HealthCheckReq)
-	if nil != err {
+	if nil != err || res.Code == result.Failed {
 		log.Println("err")
 		result.RespERR(ctx, &result.Result{
 			Message: http.StatusText(http.StatusInternalServerError),
@@ -33,7 +33,6 @@ func (m *healthCheck) Handle(ctx *gin.Context) {
 	result.RespOK(ctx, &result.Result{
 		Message: http.StatusText(http.StatusOK),
 		Code:    http.StatusOK,
-		Data:    res,
-	})
+	}, res)
 	return
 }

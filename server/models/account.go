@@ -1,6 +1,7 @@
 package models
 
 import (
+	"context"
 	"time"
 	pub "vientiane/pub/idl/grpc"
 )
@@ -8,7 +9,7 @@ import (
 const accountTableName = "vientiane_account"
 
 type AccountService interface {
-	Get(id int64) (*Account, error)
+	Get(ctx context.Context, id int64) (*Account, error)
 }
 
 type Account struct {
@@ -26,7 +27,7 @@ func (m *Account) TableName() string {
 
 func (m *Account) ToGrpc() *pub.Account {
 	account := &pub.Account{}
-	if nil == m {
+	if nil == m || m.IsEmpty() {
 		return account
 	}
 
@@ -38,4 +39,8 @@ func (m *Account) ToGrpc() *pub.Account {
 		UpdatedAt: m.UpdatedAt.Format(TimeFormatLayout),
 		CreatedAt: m.CreatedAt.Format(TimeFormatLayout),
 	}
+}
+
+func (m Account) IsEmpty() bool {
+	return m == Account{}
 }
