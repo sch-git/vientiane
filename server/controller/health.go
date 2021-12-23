@@ -14,9 +14,7 @@ func NewHealthController() *healthController {
 
 func (c *healthController) HealthCheck(ctx context.Context, req *HealthCheckReq) (res *HealthCheckRes) {
 	res = &HealthCheckRes{
-		Data: &HealthCheckData{
-
-		},
+		Data: &HealthCheckData{},
 	}
 	return
 }

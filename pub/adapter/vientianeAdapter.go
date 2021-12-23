@@ -58,10 +58,5 @@ func GetAccountByGrpc(ctx context.Context, req *vientiane.GetAccountReq, options
 
 	glog.Infof("func: %s req: %v", fun, req)
 	res, err = client.GetAccount(ctx, req)
-	if nil != err {
-		glog.Fatalln(err)
-		return
-	}
-
 	return
 }

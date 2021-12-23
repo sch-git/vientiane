@@ -23,7 +23,6 @@ func BindJsonWrapper(h func() Handle) gin.HandlerFunc {
 			return
 		}
 
-		handle := h()
-		handle.Handle(c)
+		h().Handle(c)
 	}
 }

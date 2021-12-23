@@ -1,10 +1,11 @@
 package test
 
 import (
+	"context"
 	"github.com/golang/glog"
 	"testing"
 	"vientiane/server/dao"
-	. "vientiane/server/db"
+	. "vientiane/server/database"
 )
 
 func TestGet(t *testing.T) {
@@ -16,7 +17,7 @@ func TestGet(t *testing.T) {
 	}
 
 	accountDAO := dao.NewAccountDAO()
-	account, err := accountDAO.Get(1, db)
+	account, err := accountDAO.Get(context.TODO(), 1, db)
 	if nil != err {
 		glog.Errorf("get account err: %v", err)
 		return

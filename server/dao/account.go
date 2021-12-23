@@ -1,7 +1,9 @@
 package dao
 
 import (
+	"context"
 	"errors"
+	"fmt"
 	"github.com/golang/glog"
 	"gorm.io/gorm"
 	"vientiane/server/models"
@@ -14,7 +16,7 @@ func NewAccountDAO() *AccountDAO {
 	return &AccountDAO{}
 }
 
-func (d *AccountDAO) Get(id int64, db *gorm.DB) (account *models.Account, err error) {
+func (d *AccountDAO) Get(ctx context.Context, id int64, db *gorm.DB) (account *models.Account, err error) {
 	fun := "AccountDAO.Get-->"
 
 	result := db.First(&account)
@@ -25,7 +27,8 @@ func (d *AccountDAO) Get(id int64, db *gorm.DB) (account *models.Account, err er
 	}
 
 	if result.Error != nil {
-		err = result.Error
+		err = fmt.Errorf("%s get account by id: %d err: %v", fun, id, result.Error)
+		return
 	}
 
 	return

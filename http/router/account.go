@@ -3,13 +3,13 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"vientiane/http/handle"
-	"vientiane/http/handle/health"
+	"vientiane/http/handle/account"
 )
 
-func HandleHealth(r *gin.Engine, moduleName string) {
+func HandleAccount(r *gin.Engine, moduleName string) {
 	router := r.Group(moduleName)
 	getRouteConfigs := []RouteConfig{
-		{"/ping", handle.BindJsonWrapper(health.FactoryHealthCheck)},
+		{"/get/:id", handle.BindJsonWrapper(account.FactoryGetAccount)},
 	}
 
 	for _, conf := range getRouteConfigs {
