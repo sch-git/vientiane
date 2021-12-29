@@ -7,7 +7,7 @@ const (
 	InvalidReqIsNil    = 400
 	InvalidReqIsNilMsg = "请求参数错误: req is nil"
 
-	ServerGetErr = 500
+	ServerErr = 500
 
 	AESSalt = "321423u9y8d2fwfl" // TODO
 )

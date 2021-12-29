@@ -60,3 +60,16 @@ func GetAccountByGrpc(ctx context.Context, req *vientiane.GetAccountReq, options
 	res, err = client.GetAccount(ctx, req)
 	return
 }
+
+func ListAccountByGrpc(ctx context.Context, req *vientiane.ListAccountReq, options ...grpc.CallOption) (res *vientiane.ListAccountRes, err error) {
+	fun := "GetAccountByGrpc-->"
+	client, conn := getClient()
+	defer conn.Close()
+
+	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
+	defer cancel()
+
+	glog.Infof("func: %s req: %v", fun, req)
+	res, err = client.ListAccount(ctx, req)
+	return
+}

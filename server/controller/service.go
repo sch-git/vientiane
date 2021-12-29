@@ -14,3 +14,7 @@ func (s *VientianeServiceImpl) HealthCheck(ctx context.Context, req *HealthCheck
 func (s *VientianeServiceImpl) GetAccount(ctx context.Context, req *GetAccountReq) (*GetAccountRes, error) {
 	return HandleVientiane.account.GetAccount(ctx, req), nil
 }
+
+func (s *VientianeServiceImpl) ListAccount(ctx context.Context, req *ListAccountReq) (*ListAccountRes, error) {
+	return HandleVientiane.account.ListAccount(ctx, req), nil
+}
