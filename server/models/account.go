@@ -10,6 +10,7 @@ const accountTableName = "vientiane_account"
 
 type AccountService interface {
 	Get(ctx context.Context, id int64) (*Account, error)
+	List(cxt context.Context, account *Account) ([]*Account, error)
 }
 
 type Account struct {
@@ -19,6 +20,8 @@ type Account struct {
 	Email     string    `json:"email"`
 	UpdatedAt time.Time `json:"updated_at"`
 	CreatedAt time.Time `json:"created_at"`
+	Limit     int64
+	Offset    int64
 }
 
 func (m *Account) TableName() string {

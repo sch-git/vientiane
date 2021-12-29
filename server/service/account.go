@@ -40,3 +40,26 @@ func (s *AccountService) Get(ctx context.Context, id int64) (account *models.Acc
 
 	return
 }
+
+func (s *AccountService) List(ctx context.Context, account *models.Account) (accounts []*models.Account, err error) {
+	fun := "AccountService.List-->"
+
+	if nil == account {
+		err = fmt.Errorf("%s account is nil", fun)
+		return
+	}
+
+	db, err := s.db.GetDB()
+	if nil != err {
+		err = fmt.Errorf("%s get db err: %v", fun, err)
+		return
+	}
+
+	accounts, err = s.dao.List(ctx, account, db)
+	if nil != err {
+		err = fmt.Errorf("%s %v", fun, err)
+		return
+	}
+
+	return
+}

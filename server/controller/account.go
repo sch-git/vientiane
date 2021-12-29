@@ -30,7 +30,7 @@ func (c *accountController) GetAccount(ctx context.Context, req *vientiane.GetAc
 	account, err := c.service.Get(ctx, req.Id)
 	if nil != err {
 		glog.Errorf("%s %v", fun, err)
-		res = &vientiane.GetAccountRes{Code: models.ServerGetErr, Msg: err.Error()}
+		res = &vientiane.GetAccountRes{Code: models.ServerErr, Msg: err.Error()}
 		return
 	}
 
@@ -40,5 +40,50 @@ func (c *accountController) GetAccount(ctx context.Context, req *vientiane.GetAc
 			Account: account.ToGrpc(),
 		},
 	}
+	return
+}
+
+func (c *accountController) ListAccount(ctx context.Context, req *vientiane.ListAccountReq) (res *vientiane.ListAccountRes) {
+	fun := "accountController.ListAccount-->"
+
+	if nil == req {
+		glog.Errorf("%s req is nil", fun)
+		res = &vientiane.ListAccountRes{Code: models.InvalidReqIsNil, Msg: models.InvalidReqIsNilMsg}
+		return
+	}
+
+	account := &models.Account{
+		Name:   req.Name,
+		Email:  req.Email,
+		Limit:  req.Limit,
+		Offset: req.Offset,
+	}
+	accounts, err := c.service.List(ctx, account)
+	if nil != err {
+		glog.Errorf("%s list account by req: %v err", fun, req, err)
+		res = &vientiane.ListAccountRes{Code: models.ServerErr, Msg: err.Error()}
+		return
+	}
+
+	res.Data = &vientiane.ListAccountData{
+		Accounts: func() []*vientiane.Account {
+			grpcAccounts := make([]*vientiane.Account, 0)
+			if len(accounts) < 1 {
+				return grpcAccounts
+			}
+
+			for _, account := range accounts {
+				if nil == account {
+					continue
+				}
+
+				grpcAccounts = append(grpcAccounts, account.ToGrpc())
+			}
+			return grpcAccounts
+		}(),
+		Offset: req.Offset + int64(len(accounts)),
+		//Count: TODO
+	}
+
 	return
 }
