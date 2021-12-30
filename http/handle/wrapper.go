@@ -2,20 +2,21 @@ package handle
 
 import (
 	"github.com/gin-gonic/gin"
-	"log"
+	"github.com/golang/glog"
 	"net/http"
 	"vientiane/http/result"
 )
 
-type Handle interface {
+type Handler interface {
 	Handle(ctx *gin.Context)
 }
 
-func BindJsonWrapper(h func() Handle) gin.HandlerFunc {
+func BindJsonWrapper(h func() Handler) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		err := c.Bind(h)
+		ins := h()
+		err := c.Bind(&ins)
 		if nil != err {
-			log.Println("bind json err")
+			glog.Errorf("%v", err)
 			result.RespERR(c, &result.Result{
 				Code:    http.StatusBadRequest,
 				Message: "bind json err",
@@ -23,6 +24,6 @@ func BindJsonWrapper(h func() Handle) gin.HandlerFunc {
 			return
 		}
 
-		h().Handle(c)
+		ins.Handle(c)
 	}
 }
