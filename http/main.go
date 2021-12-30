@@ -18,5 +18,7 @@ func main() {
 	// TODO module api 各个模块的 API 写在这里
 	router.HandleHealth(r, "health")
 	router.HandleAccount(r, "account")
+
+	//flag.Parse()
 	r.Run("localhost:8080")
 }

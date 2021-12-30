@@ -11,8 +11,14 @@ func HandleAccount(r *gin.Engine, moduleName string) {
 	getRouteConfigs := []RouteConfig{
 		{"/get/:id", handle.BindJsonWrapper(account.FactoryGetAccount)},
 	}
+	postRouteConfigs := []RouteConfig{
+		{"/list", handle.BindJsonWrapper(account.FactoryListAccount)},
+	}
 
 	for _, conf := range getRouteConfigs {
 		router.GET(conf.Path, conf.Handle)
+	}
+	for _, conf := range postRouteConfigs {
+		router.POST(conf.Path, conf.Handle)
 	}
 }

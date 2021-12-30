@@ -14,7 +14,7 @@ type healthCheck struct {
 	pub.HealthCheckReq
 }
 
-func FactoryHealthCheck() handle.Handle {
+func FactoryHealthCheck() handle.Handler {
 	return new(healthCheck)
 }
 

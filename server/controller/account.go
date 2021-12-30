@@ -45,6 +45,7 @@ func (c *accountController) GetAccount(ctx context.Context, req *vientiane.GetAc
 
 func (c *accountController) ListAccount(ctx context.Context, req *vientiane.ListAccountReq) (res *vientiane.ListAccountRes) {
 	fun := "accountController.ListAccount-->"
+	res = &vientiane.ListAccountRes{}
 
 	if nil == req {
 		glog.Errorf("%s req is nil", fun)
