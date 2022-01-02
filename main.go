@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/golang/glog"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"net"
 	"vientiane/pub/adapter"
@@ -11,16 +11,22 @@ import (
 )
 
 func main() {
+	// 初始化 zap 日志
+	vlog := zap.NewExample()
+	defer vlog.Sync()
+	vlog.Info("server start ...")
+
+	// 初始化 grpc 服务端
 	grpcServer := grpc.NewServer()
 	vientiane.RegisterVientianeServiceServer(grpcServer, new(controller.VientianeServiceImpl))
 
 	listen, err := net.Listen("tcp", fmt.Sprintf(":%d", adapter.Port))
 	if nil != err {
-		glog.Fatalln(err)
+		vlog.Fatal("net listen err", zap.Error(err))
 	}
 
 	err = grpcServer.Serve(listen)
 	if nil != err {
-		glog.Fatalln(err)
+		vlog.Fatal("serve err", zap.Error(err))
 	}
 }

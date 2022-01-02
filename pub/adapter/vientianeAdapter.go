@@ -3,7 +3,7 @@ package adapter
 import (
 	"context"
 	"fmt"
-	"github.com/golang/glog"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"log"
 	"time"
@@ -16,7 +16,8 @@ const (
 )
 
 var (
-	uri = fmt.Sprintf("%s:%d", domain, Port)
+	uri  = fmt.Sprintf("%s:%d", domain, Port)
+	vlog = zap.NewExample()
 )
 
 func getClient() (vientiane.VientianeServiceClient, *grpc.ClientConn) {
@@ -38,10 +39,9 @@ func HealthCheckByGrpc(ctx context.Context, req *vientiane.HealthCheckReq, optio
 	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
 	defer cancel()
 
-	glog.Infof("func: %s req: %v", fun, req)
 	res, err = client.HealthCheck(ctx, req)
 	if nil != err {
-		glog.Fatalln(err)
+		vlog.Fatal(fun, zap.Error(err))
 		return
 	}
 
@@ -56,7 +56,7 @@ func GetAccountByGrpc(ctx context.Context, req *vientiane.GetAccountReq, options
 	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
 	defer cancel()
 
-	glog.Infof("func: %s req: %v", fun, req)
+	vlog.Info(fun, zap.Any("req", req))
 	res, err = client.GetAccount(ctx, req)
 	return
 }
@@ -69,7 +69,7 @@ func ListAccountByGrpc(ctx context.Context, req *vientiane.ListAccountReq, optio
 	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
 	defer cancel()
 
-	glog.Infof("func: %s req: %v", fun, req)
+	vlog.Info(fun, zap.Any("req", req))
 	res, err = client.ListAccount(ctx, req)
 	return
 }

@@ -2,7 +2,7 @@ package controller
 
 import (
 	"context"
-	"github.com/golang/glog"
+	"go.uber.org/zap"
 	vientiane "vientiane/pub/idl/grpc"
 	"vientiane/server/models"
 	"vientiane/server/service"
@@ -22,14 +22,14 @@ func (c *accountController) GetAccount(ctx context.Context, req *vientiane.GetAc
 	fun := "accountController.GetAccount-->"
 
 	if nil == req {
-		glog.Errorf("%s req is nil", fun)
+		vlog.Error(fun, zap.String("req", "req is nil"))
 		res = &vientiane.GetAccountRes{Code: models.InvalidReqIsNil, Msg: models.InvalidReqIsNilMsg}
 		return
 	}
 
 	account, err := c.service.Get(ctx, req.Id)
 	if nil != err {
-		glog.Errorf("%s %v", fun, err)
+		vlog.Error(fun, zap.Error(err))
 		res = &vientiane.GetAccountRes{Code: models.ServerErr, Msg: err.Error()}
 		return
 	}
@@ -48,7 +48,7 @@ func (c *accountController) ListAccount(ctx context.Context, req *vientiane.List
 	res = &vientiane.ListAccountRes{}
 
 	if nil == req {
-		glog.Errorf("%s req is nil", fun)
+		vlog.Error(fun, zap.String("req", "req is nil"))
 		res = &vientiane.ListAccountRes{Code: models.InvalidReqIsNil, Msg: models.InvalidReqIsNilMsg}
 		return
 	}
@@ -61,7 +61,7 @@ func (c *accountController) ListAccount(ctx context.Context, req *vientiane.List
 	}
 	accounts, err := c.service.List(ctx, account)
 	if nil != err {
-		glog.Errorf("%s list account by req: %v err", fun, req, err)
+		vlog.Error(fun, zap.Error(err))
 		res = &vientiane.ListAccountRes{Code: models.ServerErr, Msg: err.Error()}
 		return
 	}

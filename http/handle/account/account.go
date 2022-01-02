@@ -2,7 +2,7 @@ package account
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/golang/glog"
+	"go.uber.org/zap"
 	"strconv"
 	"vientiane/http/handle"
 	"vientiane/http/result"
@@ -26,7 +26,7 @@ func (m *getAccount) Handle(ctx *gin.Context) {
 
 	res, err := adapter.GetAccountByGrpc(ctx, &m.GetAccountReq)
 	if nil != err || res.Code == result.Failed {
-		glog.Errorf("%s %v", fun, err)
+		handle.Vlog.Error(fun, zap.Error(err))
 		result.RespERR(ctx, res)
 		return
 	}
@@ -46,10 +46,9 @@ func FactoryListAccount() handle.Handler {
 func (m *listAccount) Handle(ctx *gin.Context) {
 	fun := "listAccount.Handle-->"
 
-	glog.Infof("req %+v", m)
 	res, err := adapter.ListAccountByGrpc(ctx, &m.ListAccountReq)
 	if nil != err || res.Code == result.Failed {
-		glog.Errorf("%s %v", fun, err)
+		handle.Vlog.Error(fun, zap.Error(err))
 		result.RespERR(ctx, res)
 		return
 	}
