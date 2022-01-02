@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/golang/glog"
+	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -30,7 +30,7 @@ func (d *DB) Begin() (db *gorm.DB, err error) {
 	fun := "GetTX-->"
 	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if nil != err {
-		glog.Errorf("%s: get tx err: %v", fun, err)
+		err = fmt.Errorf("%s: get tx err: %v", fun, err)
 		return
 	}
 

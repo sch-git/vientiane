@@ -2,13 +2,18 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"io"
 	"os"
 	"vientiane/http/router"
 )
 
 func main() {
-	// 记录日志到文件。
+	// 初始化 zap 日志
+	vlog := zap.NewExample()
+	defer vlog.Sync()
+
+	// 记录 gin 日志到文件。
 	f, _ := os.Create("http/gin.log")
 	gin.DefaultWriter = io.MultiWriter(f)
 	// 同时将日志写到文件及控制台
