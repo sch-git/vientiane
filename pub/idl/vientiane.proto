@@ -70,6 +70,16 @@ message GetAccountRes {
   GetAccountData data = 3;
 }
 
+// doc
+message Doc {
+  int64 id = 1;
+  string content = 2;
+  int64 category_id = 3;
+  string author = 4;
+  string created_at = 5;
+  string updated_at = 6;
+}
+
 service VientianeService {
   rpc HealthCheck(HealthCheckReq) returns (HealthCheckRes){};
   // account

@@ -12,7 +12,6 @@ var (
 
 func init() {
 	dsn = "root:sch1324!/@tcp(127.0.0.1:3306)/vientiane?charset=utf8mb4&parseTime=True&loc=Local"
-
 }
 
 type DB struct{}
