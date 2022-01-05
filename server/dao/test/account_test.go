@@ -44,3 +44,21 @@ func TestList(t *testing.T) {
 
 	t.Log("res", accounts)
 }
+
+func TestAdd(t *testing.T) {
+	d := NewDB()
+	db, err := d.GetDB()
+	if nil != err {
+		glog.Errorf("get db err: %v", err)
+		return
+	}
+
+	accountDAO := dao.NewAccountDAO()
+	err = accountDAO.Add(context.TODO(), &models.Account{Name: "", Password: "123", Email: "@.com"}, db)
+	if nil != err {
+		glog.Errorf("add account err: %v", err)
+		return
+	}
+
+	t.Log("end")
+}

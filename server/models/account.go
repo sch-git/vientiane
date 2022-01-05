@@ -20,8 +20,8 @@ type Account struct {
 	Email     string    `json:"email"`
 	UpdatedAt time.Time `json:"updated_at"`
 	CreatedAt time.Time `json:"created_at"`
-	Limit     int64
-	Offset    int64
+	Limit     int64     `json:"limit" gorm:"-"`
+	Offset    int64     `json:"offset" gorm:"-"`
 }
 
 func (m *Account) TableName() string {

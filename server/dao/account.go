@@ -16,6 +16,27 @@ func NewAccountDAO() *AccountDAO {
 	return &AccountDAO{}
 }
 
+func (d *AccountDAO) Add(ctx context.Context, account *models.Account, db *gorm.DB) (err error) {
+	fun := "AccountDAO.Add-->"
+	if db == nil {
+		err = fmt.Errorf("%s db is nil", fun)
+		return
+	}
+
+	if nil == account {
+		err = fmt.Errorf("%s account is nil or id is empty", fun)
+		return
+	}
+
+	err = db.Create(account).Error
+	if nil != err {
+		err = fmt.Errorf("%s %v", fun, err)
+		return
+	}
+
+	return
+}
+
 func (d *AccountDAO) Get(ctx context.Context, id int64, db *gorm.DB) (account *models.Account, err error) {
 	fun := "AccountDAO.Get-->"
 

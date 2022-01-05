@@ -26,9 +26,15 @@ server：接受对应请求进行处理，调用 db 等操作
 
 ### 账号
 
-列出账号 todo
+列出账号 - post
+```http request
+http://localhost:8080/account/list
+```
 
-获取账号详情 todo
+获取账号详情 - get
+```http request
+http://localhost:8080/account/get/{id}
+```
 
 更新账号信息 todo
 
