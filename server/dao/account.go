@@ -45,7 +45,7 @@ func (d *AccountDAO) Get(ctx context.Context, id int64, db *gorm.DB) (account *m
 		return
 	}
 
-	result := db.First(account)
+	result := db.Where("id=?", id).First(&account)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		account = &models.Account{}
 		//glog.Infof("%s get account by id: %d err: not found", fun, id)
