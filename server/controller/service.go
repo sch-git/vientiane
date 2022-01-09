@@ -18,3 +18,9 @@ func (s *VientianeServiceImpl) GetAccount(ctx context.Context, req *GetAccountRe
 func (s *VientianeServiceImpl) ListAccount(ctx context.Context, req *ListAccountReq) (*ListAccountRes, error) {
 	return HandleVientiane.account.ListAccount(ctx, req), nil
 }
+
+// category
+
+func (s *VientianeServiceImpl) ListCategory(ctx context.Context, req *ListCategoryReq) (*ListCategoryRes, error) {
+	panic("unimplemented func")
+}

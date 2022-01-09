@@ -80,9 +80,31 @@ message Doc {
   string updated_at = 6;
 }
 
+message Category {
+  int64 id = 1;
+  string name = 2;
+}
+
+message ListCategoryReq {
+  int64 offset = 1;
+  int64 limit = 2;
+}
+
+message ListCategoryData {
+  repeated Category categorys = 1;
+}
+
+message ListCategoryRes {
+  int64 code = 1;
+  string msg = 2;
+  ListCategoryData data = 3;
+}
+
 service VientianeService {
   rpc HealthCheck(HealthCheckReq) returns (HealthCheckRes){};
   // account
   rpc GetAccount(GetAccountReq) returns (GetAccountRes){};
   rpc ListAccount(ListAccountReq) returns (ListAccountRes){};
+  // category
+  rpc ListCategory(ListCategoryReq) returns (ListCategoryRes){};
 }

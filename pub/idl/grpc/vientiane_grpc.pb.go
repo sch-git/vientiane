@@ -22,6 +22,8 @@ type VientianeServiceClient interface {
 	// account
 	GetAccount(ctx context.Context, in *GetAccountReq, opts ...grpc.CallOption) (*GetAccountRes, error)
 	ListAccount(ctx context.Context, in *ListAccountReq, opts ...grpc.CallOption) (*ListAccountRes, error)
+	// category
+	ListCategory(ctx context.Context, in *ListCategoryReq, opts ...grpc.CallOption) (*ListCategoryRes, error)
 }
 
 type vientianeServiceClient struct {
@@ -59,6 +61,15 @@ func (c *vientianeServiceClient) ListAccount(ctx context.Context, in *ListAccoun
 	return out, nil
 }
 
+func (c *vientianeServiceClient) ListCategory(ctx context.Context, in *ListCategoryReq, opts ...grpc.CallOption) (*ListCategoryRes, error) {
+	out := new(ListCategoryRes)
+	err := c.cc.Invoke(ctx, "/vientiane.VientianeService/ListCategory", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // VientianeServiceServer is the server API for VientianeService service.
 // All implementations must embed UnimplementedVientianeServiceServer
 // for forward compatibility
@@ -67,6 +78,8 @@ type VientianeServiceServer interface {
 	// account
 	GetAccount(context.Context, *GetAccountReq) (*GetAccountRes, error)
 	ListAccount(context.Context, *ListAccountReq) (*ListAccountRes, error)
+	// category
+	ListCategory(context.Context, *ListCategoryReq) (*ListCategoryRes, error)
 	mustEmbedUnimplementedVientianeServiceServer()
 }
 
@@ -82,6 +95,9 @@ func (UnimplementedVientianeServiceServer) GetAccount(context.Context, *GetAccou
 }
 func (UnimplementedVientianeServiceServer) ListAccount(context.Context, *ListAccountReq) (*ListAccountRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListAccount not implemented")
+}
+func (UnimplementedVientianeServiceServer) ListCategory(context.Context, *ListCategoryReq) (*ListCategoryRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListCategory not implemented")
 }
 func (UnimplementedVientianeServiceServer) mustEmbedUnimplementedVientianeServiceServer() {}
 
@@ -150,6 +166,24 @@ func _VientianeService_ListAccount_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _VientianeService_ListCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListCategoryReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VientianeServiceServer).ListCategory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/vientiane.VientianeService/ListCategory",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VientianeServiceServer).ListCategory(ctx, req.(*ListCategoryReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // VientianeService_ServiceDesc is the grpc.ServiceDesc for VientianeService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -168,6 +202,10 @@ var VientianeService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListAccount",
 			Handler:    _VientianeService_ListAccount_Handler,
+		},
+		{
+			MethodName: "ListCategory",
+			Handler:    _VientianeService_ListCategory_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

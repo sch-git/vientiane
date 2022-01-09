@@ -14,7 +14,7 @@ func main() {
 	defer vlog.Sync()
 
 	// 记录 gin 日志到文件。
-	f, _ := os.Create("http/gin.log")
+	f, _ := os.Create("./http/gin.log")
 	gin.DefaultWriter = io.MultiWriter(f)
 	// 同时将日志写到文件及控制台
 	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
@@ -25,5 +25,5 @@ func main() {
 	router.HandleAccount(r, "account")
 
 	//flag.Parse()
-	r.Run("localhost:8080")
+	r.Run(":8080")
 }

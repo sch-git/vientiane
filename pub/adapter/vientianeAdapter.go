@@ -62,7 +62,7 @@ func GetAccountByGrpc(ctx context.Context, req *vientiane.GetAccountReq, options
 }
 
 func ListAccountByGrpc(ctx context.Context, req *vientiane.ListAccountReq, options ...grpc.CallOption) (res *vientiane.ListAccountRes, err error) {
-	fun := "GetAccountByGrpc-->"
+	fun := "ListAccountByGrpc-->"
 	client, conn := getClient()
 	defer conn.Close()
 
@@ -71,5 +71,18 @@ func ListAccountByGrpc(ctx context.Context, req *vientiane.ListAccountReq, optio
 
 	vlog.Info(fun, zap.Any("req", req))
 	res, err = client.ListAccount(ctx, req)
+	return
+}
+
+func ListCategoryByGrpc(ctx context.Context, req *vientiane.ListCategoryReq, options ...grpc.CallOption) (res *vientiane.ListCategoryRes, err error) {
+	fun := "ListCategoryByGrpc-->"
+	client, conn := getClient()
+	defer conn.Close()
+
+	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
+	defer cancel()
+
+	vlog.Info(fun, zap.Any("req", req))
+	res, err = client.ListCategory(ctx, req)
 	return
 }
