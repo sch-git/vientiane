@@ -17,4 +17,5 @@
 go.sum
 vientiane
 *.log
-http/build/vientiane-api
+build/vientiane-api
+build/vientiane
