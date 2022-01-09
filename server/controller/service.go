@@ -21,6 +21,6 @@ func (s *VientianeServiceImpl) ListAccount(ctx context.Context, req *ListAccount
 
 // category
 
-//func (s *VientianeServiceImpl) ListCategory(ctx context.Context, req *ListCategoryReq) (*ListCategoryRes, error) {
-//	return HandleVientiane
-//}
+func (s *VientianeServiceImpl) ListCategory(ctx context.Context, req *ListCategoryReq) (*ListCategoryRes, error) {
+	panic("unimplemented func")
+}
