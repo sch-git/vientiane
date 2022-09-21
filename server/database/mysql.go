@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"time"
 )
 
 var (
@@ -38,5 +39,10 @@ func (d *DB) Begin() (db *gorm.DB, err error) {
 }
 
 func (d *DB) GetDB() (*gorm.DB, error) {
-	return gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db,err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	sqlDB,err := db.DB()
+	sqlDB.SetConnMaxLifetime(time.Hour)
+	sqlDB.SetMaxOpenConns(100)
+	sqlDB.SetMaxIdleConns(100)
+	return db,err
 }
