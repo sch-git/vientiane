@@ -1,12 +1,20 @@
 # vientiane
 
-## 项目架构设定与说明
+## 项目架构说明
 
 http: api 接口层，接受及返回 http 请求，调用 pub 进行业务逻辑处理
 
 pub：grpc client，暴露 grpc 接口，具体逻辑实现在 server
 
 server：接受对应请求进行处理，调用 db 等操作
+
+- vientiane/http/main.go：http 服务入口
+- vientiane/http/router：路由管理
+- vientiane/http/handle：调用后端服务处理器
+- vientiane/main.go: 后端服务入口
+- dao：数据库接口层
+- service：业务逻辑处理
+- utils：通用工具
 
 ## 参考文档
 
@@ -40,18 +48,3 @@ server：接受对应请求进行处理，调用 db 等操作
   }
 }
 ```
-
-### 账号
-
-列出账号 - post
-```http request
-http://localhost:8080/account/list
-```
-
-获取账号详情 - get
-```http request
-http://localhost:8080/account/get/{id}
-```
-
-更新账号信息 todo
-

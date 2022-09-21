@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"go-micro.dev/v4/web"
 	"go.uber.org/zap"
 	"io"
 	"os"
@@ -25,5 +26,11 @@ func main() {
 	router.HandleAccount(r, "account")
 
 	//flag.Parse()
-	r.Run(":8080")
+	//r.Run(":8080")
+
+	microService := web.NewService(
+		web.Address(":8088"),
+		web.Handler(r),
+		)
+	microService.Run()
 }
