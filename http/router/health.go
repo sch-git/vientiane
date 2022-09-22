@@ -6,7 +6,7 @@ import (
 	"vientiane/http/handle/health"
 )
 
-func HandleHealth(r *gin.Engine, moduleName string) {
+func HandleHealth(r *gin.Engine, moduleName string)  {
 	router := r.Group(moduleName)
 	getRouteConfigs := []RouteConfig{
 		{"/ping", handle.BindJsonWrapper(health.FactoryHealthCheck)},

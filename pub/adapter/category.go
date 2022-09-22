@@ -5,12 +5,10 @@ type Category struct {
 	Name string `json:"name"`
 }
 
-var (
-	Cthulhu = &Category{Id: CategoryCthulhuId, Name: CategoryCthulhuName}
-)
-
 const (
-	CategoryCthulhuId = iota + 1
-
-	CategoryCthulhuName = "克苏鲁"
+	ArticleTypeInsert      = "insert"
+	ArticleTypeUpdate      = "update"
+	ArticleTypeDelete      = "delete"
+	TopicArticle           = "article"
+	TopicArticlePartition0 = 0
 )

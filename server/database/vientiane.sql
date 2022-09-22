@@ -28,7 +28,3 @@ create table vientiane_doc
     constraint vientiane_doc_pk
         primary key (id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin comment '文档';
-
-# 标签表
-
-# 分类较少，直接在程序 pub 中定义；

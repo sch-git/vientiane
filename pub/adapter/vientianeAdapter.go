@@ -31,6 +31,7 @@ func getClient() (vientiane.VientianeServiceClient, *grpc.ClientConn) {
 	return client, conn
 }
 
+
 func HealthCheckByGrpc(ctx context.Context, req *vientiane.HealthCheckReq, options ...grpc.CallOption) (res *vientiane.HealthCheckRes, err error) {
 	fun := "HealthCheckByGrpc-->"
 	client, conn := getClient()
@@ -84,5 +85,18 @@ func ListCategoryByGrpc(ctx context.Context, req *vientiane.ListCategoryReq, opt
 
 	vlog.Info(fun, zap.Any("req", req))
 	res, err = client.ListCategory(ctx, req)
+	return
+}
+
+func GetArticleByGrpc(ctx context.Context, req *vientiane.GetArticleReq, options ...grpc.CallOption)(res *vientiane.GetArticleRes,err error)  {
+	fun := "GetArticleByGrpc-->"
+	client, conn := getClient()
+	defer conn.Close()
+
+	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
+	defer cancel()
+
+	vlog.Info(fun, zap.Any("req", req))
+	res, err = client.GetArticle(ctx, req)
 	return
 }
