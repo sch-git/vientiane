@@ -11,7 +11,8 @@ type ArticleService interface {
 	Get(ctx context.Context, id int64) (*Article, error)
 	List(ctx context.Context, article *Article) ([]*Article, error)
 	Add(ctx context.Context, article *Article) (err error)
-	Del(ctx context.Context, article *Article) (err error)
+	Del(ctx context.Context, id int64) (err error)
+	Update(ctx context.Context,article *Article) (err error)
 }
 
 type Article struct {

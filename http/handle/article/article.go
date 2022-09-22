@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"vientiane/http/handle"
 	"vientiane/http/result"
+	"vientiane/http/utils"
 	"vientiane/pub/adapter"
 	. "vientiane/pub/idl/grpc"
 )
@@ -35,3 +36,19 @@ func (m *getArticle) Handle(ctx *gin.Context) {
 	return
 }
 
+
+type addArticle struct {
+	Article
+}
+
+func FactoryAddArticle() handle.Handler {
+	return new(addArticle)
+}
+
+func (m *addArticle)Handle(ctx *gin.Context)  {
+	msg := &ArticleMsg{
+		WriteType: adapter.ArticleTypeInsert,
+		Article: &m.Article,
+	}
+	go utils.WriteMsg(msg)
+}

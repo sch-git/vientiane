@@ -1,6 +1,7 @@
 package database
 
 import (
+	"database/sql"
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -9,6 +10,8 @@ import (
 
 var (
 	dsn string
+	db *gorm.DB
+	sqlDB *sql.DB
 )
 
 func init() {
@@ -16,6 +19,14 @@ func init() {
 }
 
 type DB struct{}
+
+func init()  {
+	db,_ = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	sqlDB,_ = db.DB()
+	sqlDB.SetConnMaxLifetime(time.Hour)
+	sqlDB.SetMaxOpenConns(1000)
+	sqlDB.SetMaxIdleConns(1000)
+}
 
 func NewDB() ManagerDB {
 	return &DB{}
@@ -39,10 +50,5 @@ func (d *DB) Begin() (db *gorm.DB, err error) {
 }
 
 func (d *DB) GetDB() (*gorm.DB, error) {
-	db,err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-	sqlDB,err := db.DB()
-	sqlDB.SetConnMaxLifetime(time.Hour)
-	sqlDB.SetMaxOpenConns(100)
-	sqlDB.SetMaxIdleConns(100)
-	return db,err
+	return db,nil
 }

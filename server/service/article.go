@@ -41,9 +41,52 @@ func (a *ArticleService) List(ctx context.Context, article *models.Article) ([]*
 }
 
 func (a *ArticleService) Add(ctx context.Context, article *models.Article) (err error) {
-	panic("implement me")
+	fun := "ArticleService.Add -->"
+	db, err := a.db.GetDB()
+	if err != nil {
+		err = fmt.Errorf("%s get db err: %v", fun, err)
+		return err
+	}
+
+	err = a.dao.Add(ctx,article,db)
+	if err!=nil{
+		err = fmt.Errorf("%s add article err: %v",fun,err)
+		return err
+	}
+
+	return nil
 }
 
-func (a *ArticleService) Del(ctx context.Context, article *models.Article) (err error) {
-	panic("implement me")
+func (a *ArticleService) Del(ctx context.Context, id int64) (err error) {
+	fun := "ArticleService.Del -->"
+	db, err := a.db.GetDB()
+	if err != nil {
+		err = fmt.Errorf("%s get db err: %v", fun, err)
+		return err
+	}
+
+	err = a.dao.Del(ctx,id,db)
+	if err!=nil{
+		err = fmt.Errorf("%s del article err: %v",fun,err)
+		return err
+	}
+
+	return nil
+}
+
+func (a *ArticleService) Update(ctx context.Context, article *models.Article) (err error) {
+	fun := "ArticleService.Update -->"
+	db, err := a.db.GetDB()
+	if err != nil {
+		err = fmt.Errorf("%s get db err: %v", fun, err)
+		return err
+	}
+
+	err = a.dao.Set(ctx,article,db)
+	if err!=nil{
+		err = fmt.Errorf("%s update article err: %v",fun,err)
+		return err
+	}
+
+	return nil
 }

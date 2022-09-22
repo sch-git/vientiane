@@ -1,1 +1,5 @@
-package consumer
+package mq
+
+func ArticleConsumer()  {
+	
+}
