@@ -7,12 +7,14 @@ import (
 	"io"
 	"os"
 	"vientiane/http/router"
+	"vientiane/http/utils"
 )
 
 func main() {
 	// 初始化 zap 日志
 	vlog := zap.NewExample()
 	defer vlog.Sync()
+	defer utils.KafkaClose()
 
 	// 记录 gin 日志到文件。
 	f, _ := os.Create("./http/gin.log")

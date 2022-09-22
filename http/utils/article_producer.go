@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"github.com/segmentio/kafka-go"
 	"log"
-	"time"
 	"vientiane/pub/adapter"
 	pub "vientiane/pub/idl/grpc"
 )
@@ -15,13 +14,17 @@ var (
 	err error
 )
 
+func KafkaClose()  {
+	conn.Close()
+}
+
 func init()  {
 	// to produce messages
 	conn, err = kafka.DialLeader(context.Background(), "tcp", "localhost:9092", adapter.TopicArticle, adapter.TopicArticlePartition0)
 	if err != nil {
 		log.Fatal("failed to dial leader:", err)
 	}
-	_ = conn.SetWriteDeadline(time.Now().Add(10*time.Second))
+	//_ = conn.SetWriteDeadline(time.Now().Add(10*time.Second))
 }
 
 func WriteMsg(msg *pub.ArticleMsg)  {
