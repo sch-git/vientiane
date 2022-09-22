@@ -122,6 +122,11 @@ message GetArticleRes {
   GetArticleData data = 3;
 }
 
+message ArticleMsg {
+  string WriteType = 1;
+  Article article = 2;
+}
+
 
 service VientianeService {
   rpc HealthCheck(HealthCheckReq) returns (HealthCheckRes){};
