@@ -2,8 +2,11 @@ package article
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/patrickmn/go-cache"
 	"go.uber.org/zap"
+	"log"
 	"strconv"
+	"time"
 	"vientiane/http/handle"
 	"vientiane/http/result"
 	"vientiane/http/utils"
@@ -11,6 +14,9 @@ import (
 	. "vientiane/pub/idl/grpc"
 )
 
+var (
+	articleCache = cache.New(time.Minute,time.Minute)
+)
 type getArticle struct {
 	GetArticleReq
 }
@@ -24,15 +30,21 @@ func (m *getArticle) Handle(ctx *gin.Context) {
 
 	id, _ := strconv.Atoi(ctx.Param("id"))
 	m.Id = int64(id)
-
-	res, err := adapter.GetArticleByGrpc(ctx, &m.GetArticleReq)
-	if nil != err || res.Code == result.Failed {
-		handle.Vlog.Error(fun, zap.Error(err))
-		result.RespERR(ctx, res)
-		return
+	val,ok:= articleCache.Get(ctx.Param("id"))
+	if !ok {
+		res, err := adapter.GetArticleByGrpc(ctx, &m.GetArticleReq)
+		if nil != err || res.Code == result.Failed {
+			handle.Vlog.Error(fun, zap.Error(err))
+			result.RespERR(ctx, res)
+			return
+		}
+		articleCache.Set(ctx.Param("id"),res,time.Second*5)
+		result.RespOK(ctx, res, res.Data)
+	}else{
+		res := val.(*GetArticleRes)
+		result.RespOK(ctx, res, res.Data)
 	}
 
-	result.RespOK(ctx, res, res.Data)
 	return
 }
 
@@ -50,6 +62,7 @@ func (m *addArticle)Handle(ctx *gin.Context)  {
 		WriteType: adapter.ArticleTypeInsert,
 		Article: &m.Article,
 	}
+	log.Println(msg)
 	go utils.WriteMsg(msg)
 }
 
