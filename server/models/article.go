@@ -17,8 +17,8 @@ type ArticleService interface {
 
 type Article struct {
 	Id      int64  `json:"id"`
-	Title   string `json:"title"`
-	Content string `json:"content"`
+	Title   string `json:"title,omitempty"`
+	Content string `json:"content,omitempty"`
 	Author  string `json:"author"`
 	Limit   int64  `json:"limit" gorm:"-"`
 	Offset  int64  `json:"offset" gorm:"-"`

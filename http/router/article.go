@@ -13,6 +13,8 @@ func HandleArticle(r *gin.Engine, moduleName string) {
 	}
 	postRouteConfigs := []RouteConfig{
 		{"/add", handle.BindJsonWrapper(article.FactoryAddArticle)},
+		{"/del", handle.BindJsonWrapper(article.FactoryDelArticle)},
+		{"/set", handle.BindJsonWrapper(article.FactorySetArticle)},
 	}
 
 	for _, conf := range getRouteConfigs {

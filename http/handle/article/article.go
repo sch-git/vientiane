@@ -52,3 +52,36 @@ func (m *addArticle)Handle(ctx *gin.Context)  {
 	}
 	go utils.WriteMsg(msg)
 }
+
+
+type delArticle struct {
+	Article
+}
+
+func FactoryDelArticle() handle.Handler {
+	return new(delArticle)
+}
+
+func (m *delArticle)Handle(ctx *gin.Context)  {
+	msg := &ArticleMsg{
+		WriteType: adapter.ArticleTypeDelete,
+		Article: &m.Article,
+	}
+	go utils.WriteMsg(msg)
+}
+
+type setArticle struct {
+	Article
+}
+
+func FactorySetArticle() handle.Handler {
+	return new(setArticle)
+}
+
+func (m *setArticle)Handle(ctx *gin.Context)  {
+	msg := &ArticleMsg{
+		WriteType: adapter.ArticleTypeUpdate,
+		Article: &m.Article,
+	}
+	go utils.WriteMsg(msg)
+}
