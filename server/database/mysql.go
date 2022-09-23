@@ -15,7 +15,7 @@ var (
 )
 
 func init() {
-	dsn = "username:password/@tcp(localhost:3306)/vientiane?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn = "root:sch1324!/@tcp(localhost:3306)/vientiane?charset=utf8mb4&parseTime=True&loc=Local"
 }
 
 type DB struct{}

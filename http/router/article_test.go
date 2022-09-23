@@ -43,10 +43,10 @@ func TestGetArticle(t *testing.T) {
 
 func TestAddArticle(t *testing.T) {
 	wg := WorkerGroup{
-		Workers: make(chan chan *http.Request, 100),
+		Workers: make(chan chan *http.Request, 50),
 	}
 	resCh := make(chan string, 100000)
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 50; i++ {
 		worker := make(chan *http.Request, 0)
 		wg.Workers <- worker
 		go Worker(worker, resCh)
@@ -88,11 +88,11 @@ func Worker(worker chan *http.Request, ch chan string) {
 				log.Println(err)
 			}
 
-			if response.StatusCode == 200 {
+			if request.Method == http.MethodGet && response.StatusCode == 200 {
 				body, _ := ioutil.ReadAll(response.Body)
 				ch <- string(body)
+				response.Body.Close()
 			}
-			response.Body.Close()
 		}
 	}
 }
