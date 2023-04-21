@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"time"
 	vientiane "vientiane/pub/idl/grpc"
@@ -21,7 +22,7 @@ var (
 )
 
 func getClient() (vientiane.VientianeServiceClient, *grpc.ClientConn) {
-	conn, err := grpc.Dial(uri, grpc.WithInsecure())
+	conn, err := grpc.Dial(uri, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if nil != err {
 		log.Fatalln(err)
 		return nil, nil
@@ -30,7 +31,6 @@ func getClient() (vientiane.VientianeServiceClient, *grpc.ClientConn) {
 	client := vientiane.NewVientianeServiceClient(conn)
 	return client, conn
 }
-
 
 func HealthCheckByGrpc(ctx context.Context, req *vientiane.HealthCheckReq, options ...grpc.CallOption) (res *vientiane.HealthCheckRes, err error) {
 	fun := "HealthCheckByGrpc-->"
@@ -88,7 +88,7 @@ func ListCategoryByGrpc(ctx context.Context, req *vientiane.ListCategoryReq, opt
 	return
 }
 
-func GetArticleByGrpc(ctx context.Context, req *vientiane.GetArticleReq, options ...grpc.CallOption)(res *vientiane.GetArticleRes,err error)  {
+func GetArticleByGrpc(ctx context.Context, req *vientiane.GetArticleReq, options ...grpc.CallOption) (res *vientiane.GetArticleRes, err error) {
 	fun := "GetArticleByGrpc-->"
 	client, conn := getClient()
 	defer conn.Close()
