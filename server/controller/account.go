@@ -4,6 +4,7 @@ import (
 	"context"
 	"go.uber.org/zap"
 	vientiane "vientiane/pub/idl/grpc"
+	"vientiane/server/consts"
 	"vientiane/server/models"
 	"vientiane/server/service"
 )
@@ -23,19 +24,19 @@ func (c *accountController) GetAccount(ctx context.Context, req *vientiane.GetAc
 
 	if nil == req {
 		vlog.Error(fun, zap.String("req", "req is nil"))
-		res = &vientiane.GetAccountRes{Code: models.InvalidReqIsNil, Msg: models.InvalidReqIsNilMsg}
+		res = &vientiane.GetAccountRes{Code: consts.InvalidReqIsNil, Msg: consts.InvalidReqIsNilMsg}
 		return
 	}
 
 	account, err := c.service.Get(ctx, req.Id)
 	if nil != err {
 		vlog.Error(fun, zap.Error(err))
-		res = &vientiane.GetAccountRes{Code: models.ServerErr, Msg: err.Error()}
+		res = &vientiane.GetAccountRes{Code: consts.ServerErr, Msg: err.Error()}
 		return
 	}
 
 	res = &vientiane.GetAccountRes{
-		Code: models.StatusOK,
+		Code: consts.StatusOK,
 		Data: &vientiane.GetAccountData{
 			Account: account.ToGrpc(),
 		},
@@ -49,7 +50,7 @@ func (c *accountController) ListAccount(ctx context.Context, req *vientiane.List
 
 	if nil == req {
 		vlog.Error(fun, zap.String("req", "req is nil"))
-		res = &vientiane.ListAccountRes{Code: models.InvalidReqIsNil, Msg: models.InvalidReqIsNilMsg}
+		res = &vientiane.ListAccountRes{Code: consts.InvalidReqIsNil, Msg: consts.InvalidReqIsNilMsg}
 		return
 	}
 
@@ -62,7 +63,7 @@ func (c *accountController) ListAccount(ctx context.Context, req *vientiane.List
 	accounts, err := c.service.List(ctx, account)
 	if nil != err {
 		vlog.Error(fun, zap.Error(err))
-		res = &vientiane.ListAccountRes{Code: models.ServerErr, Msg: err.Error()}
+		res = &vientiane.ListAccountRes{Code: consts.ServerErr, Msg: err.Error()}
 		return
 	}
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 	pub "vientiane/pub/idl/grpc"
+	"vientiane/server/consts"
 )
 
 const accountTableName = "vientiane_account"
@@ -39,8 +40,8 @@ func (m *Account) ToGrpc() *pub.Account {
 		Name:      m.Name,
 		Password:  m.Password,
 		Email:     m.Email,
-		UpdatedAt: m.UpdatedAt.Format(TimeFormatLayout),
-		CreatedAt: m.CreatedAt.Format(TimeFormatLayout),
+		UpdatedAt: m.UpdatedAt.Format(consts.TimeFormatLayout),
+		CreatedAt: m.CreatedAt.Format(consts.TimeFormatLayout),
 	}
 }
 

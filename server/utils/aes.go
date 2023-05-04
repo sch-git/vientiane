@@ -6,7 +6,7 @@ import (
 	"crypto/cipher"
 	"encoding/base64"
 	"fmt"
-	"vientiane/server/models"
+	"vientiane/server/consts"
 )
 
 /**
@@ -16,15 +16,15 @@ import (
 func AESEncrypt(val string) (mobile string, err error) {
 	fun := "Utils.AESEncrypt"
 
-	block, err := aes.NewCipher([]byte(models.AESSalt))
+	block, err := aes.NewCipher([]byte(consts.AESSalt))
 	if nil != err {
-		err = fmt.Errorf("%s new cipher by salt: %s err", fun, models.AESSalt)
+		err = fmt.Errorf("%s new cipher by salt: %s err", fun, consts.AESSalt)
 		return
 	}
 
 	data := pKCS7Padding([]byte(val), block.BlockSize())
 	crypted := make([]byte, len(data))
-	encrypter := cipher.NewCBCEncrypter(block, []byte(models.AESSalt[:block.BlockSize()]))
+	encrypter := cipher.NewCBCEncrypter(block, []byte(consts.AESSalt[:block.BlockSize()]))
 	encrypter.CryptBlocks(crypted, data)
 
 	mobile = base64.StdEncoding.EncodeToString(crypted)
@@ -40,14 +40,14 @@ func AESDecrypt(val string) (mobile string, err error) {
 		return
 	}
 
-	block, err := aes.NewCipher([]byte(models.AESSalt))
+	block, err := aes.NewCipher([]byte(consts.AESSalt))
 	if nil != err {
-		err = fmt.Errorf("%s new cipher by salt: %s err", fun, models.AESSalt)
+		err = fmt.Errorf("%s new cipher by salt: %s err", fun, consts.AESSalt)
 		return
 	}
 
 	crypted := make([]byte, len(phone))
-	decrypter := cipher.NewCBCDecrypter(block, []byte(models.AESSalt[:block.BlockSize()]))
+	decrypter := cipher.NewCBCDecrypter(block, []byte(consts.AESSalt[:block.BlockSize()]))
 
 	decrypter.CryptBlocks(crypted, phone)
 	crypted = pKCS7UnPadding(crypted)

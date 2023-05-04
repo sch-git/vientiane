@@ -5,6 +5,7 @@ import (
 	"go.uber.org/zap"
 	"log"
 	vientiane "vientiane/pub/idl/grpc"
+	"vientiane/server/consts"
 	"vientiane/server/models"
 	"vientiane/server/service"
 )
@@ -24,21 +25,21 @@ func (c *articleController) GetArticle(ctx context.Context, req *vientiane.GetAr
 
 	if nil == req {
 		vlog.Error(fun, zap.String("req", "req is nil"))
-		res = &vientiane.GetArticleRes{Code: models.InvalidReqIsNil, Msg: models.InvalidReqIsNilMsg}
+		res = &vientiane.GetArticleRes{Code: consts.InvalidReqIsNil, Msg: consts.InvalidReqIsNilMsg}
 		return
 	}
 
 	article, err := c.service.Get(ctx, req.Id)
 	if nil != err {
 		vlog.Error(fun, zap.Error(err))
-		res = &vientiane.GetArticleRes{Code: models.ServerErr, Msg: err.Error()}
+		res = &vientiane.GetArticleRes{Code: consts.ServerErr, Msg: err.Error()}
 		return
 	}
 	log.Println(req.GetId())
 	log.Println(article)
 
 	res = &vientiane.GetArticleRes{
-		Code: models.StatusOK,
+		Code: consts.StatusOK,
 		Data: &vientiane.GetArticleData{
 			Article: article.ToGrpc(),
 		},
