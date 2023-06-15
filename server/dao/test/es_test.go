@@ -9,8 +9,9 @@ import (
 	"log"
 	"strings"
 	"testing"
-	"time"
+	"vientiane/server/consts"
 	"vientiane/server/es_model"
+	"vientiane/server/service/entity"
 )
 
 var (
@@ -65,30 +66,63 @@ func TestAddIndices(t *testing.T) {
         "number_of_replicas": 0,
         "refresh_interval": "1s",
         "index": {
-          "sort.field": "created_at",
-          "sort.order": "desc"
+            "sort.field": "book_created_at",
+            "sort.order": "desc"
         },
-        "index.store.preload": ["nvd", "dvd", "tim", "tip", "doc"]
+        "index.store.preload": [
+            "nvd",
+            "dvd",
+            "tim",
+            "tip",
+            "doc"
+        ]
     },
     "mappings": {
         "properties": {
-            "author_ids": {
-                "type": "keyword"
+            "book_id": {
+                "type": "long"
             },
-            "account_id": {
-                "type": "keyword"
-            },
-            "user_id": {
+            "book_title": {
                 "type": "keyword"
             },
             "client_id": {
                 "type": "integer"
             },
-            "created_at": {
+            "book_category_list": {
+                "type": "keyword"
+            },
+            "book_category_name_list": {
+                "type": "keyword"
+            },
+            "book_status": {
+                "type": "integer"
+            },
+            "author": {
+                "type": "keyword"
+            },
+            "author_id": {
+                "type": "long"
+            },
+            "account_id": {
+                "type": "long"
+            },
+            "user_id": {
+                "type": "long"
+            },
+            "editor": {
+                "type": "keyword"
+            },
+            "editor_id": {
+                "type": "long"
+            },
+            "total_chapter_num": {
+                "type": "integer"
+            },
+            "book_created_at": {
                 "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
                 "type": "date"
             },
-            "updated_at": {
+            "book_updated_at": {
                 "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
                 "type": "date"
             }
@@ -97,7 +131,7 @@ func TestAddIndices(t *testing.T) {
 }
     `
 	esResp, err := esCli.Indices.Create(
-		"api-index",
+		"book_info",
 		esCli.Indices.Create.WithPretty(),
 		esCli.Indices.Create.WithBody(strings.NewReader(config)),
 	)
@@ -110,17 +144,17 @@ func TestAddIndices(t *testing.T) {
 	t.Log(esResp)
 }
 
-// bulk 写入
+// bulk upsert
 func TestBulkInsert(t *testing.T) {
-	infos := []*es_model.ESAccountInfo{
-		{AuthorIds: []int64{1, 2, 3}, AccountId: 10, UserId: 10, ClientId: []int64{1, 2, 3, 4}, CreatedAt: time.Now().Format("2006-01-02 15:04:05"), UpdatedAt: time.Now().Format("2006-01-02 15:04:05")},
-		{AuthorIds: []int64{2, 3, 4}, AccountId: 11, UserId: 11, ClientId: []int64{1, 2, 3}, CreatedAt: time.Now().Format("2006-01-02 15:04:05"), UpdatedAt: time.Now().Format("2006-01-02 15:04:05")},
+	infos := []*es_model.ESBookInfo{
+		{BookId: 100001, BookTitle: "大爱如烟", ClientId: 1, AuthorId: 10011, AccountId: 31, BookCategoryList: []int64{1, 17}, BookCategoryNameList: []string{"现代言情", "总裁豪门"}, BookCreatedAt: "2017-04-14 11:23:59", BookUpdatedAt: "2023-06-01 02:30:00"},
+		{BookId: 100002, BookTitle: "上海上海", ClientId: 1, AuthorId: 10016, AccountId: 36, BookCategoryList: []int64{8, 42}, BookCategoryNameList: []string{"都市人生", "都市高手"}, BookCreatedAt: "2017-04-14 11:39:29", BookUpdatedAt: "2023-06-01 02:30:00"},
 	}
 
 	items := make([]*es_model.ESBulkItem, 0)
 	for _, info := range infos {
 		bs, _ := json.Marshal(info)
-		items = append(items, &es_model.ESBulkItem{Index: "api-index", DocId: fmt.Sprintf("%d", info.AccountId), DocData: []byte(fmt.Sprintf(`{"doc":%s, "doc_as_upsert": true}`, string(bs)))})
+		items = append(items, &es_model.ESBulkItem{Index: "book_info", DocId: fmt.Sprintf("%d", info.BookId), DocData: []byte(fmt.Sprintf(`{"doc":%s, "doc_as_upsert": true}`, string(bs)))})
 	}
 
 	buf := buffer.Buffer{}
@@ -132,7 +166,7 @@ func TestBulkInsert(t *testing.T) {
 	log.Println(buf.String())
 	esResp, err := esCli.Bulk(
 		strings.NewReader(buf.String()),
-		esCli.Bulk.WithIndex("api-index"),
+		esCli.Bulk.WithIndex("book_info"),
 		esCli.Bulk.WithPretty(),
 	)
 	if err != nil {
@@ -145,39 +179,56 @@ func TestBulkInsert(t *testing.T) {
 
 // 检索
 func TestSearch(t *testing.T) {
-	query := `
-{
-	"_source": ["_id"],
-    "query": {
-        "bool": {
-            "should": [
-                {
-                    "match": {
-                        "client_id": 1
-                    }
-                },
-                {
-                    "match": {
-                        "client_id": 4
-                    }
-                }
-            ],
-            "must": [
-                {
-                    "match": {
-                        "client_id": 4
-                    }
-                }
-            ]
-        }
-    }
-}
-`
+	//	query := `
+	//{
+	//	"_source": ["_id"],
+	//    "query": {
+	//        "bool": {
+	//            "should": [
+	//                {
+	//                    "match": {
+	//                        "client_id": 1
+	//                    }
+	//                },
+	//                {
+	//                    "match": {
+	//                        "client_id": 4
+	//                    }
+	//                }
+	//            ],
+	//            "must": [
+	//                {
+	//                    "match": {
+	//                        "client_id": 4
+	//                    }
+	//                }
+	//            ]
+	//        }
+	//    }
+	//}
+	//`
+
+	conditions := &entity.Conditions{
+		Musts: []entity.Conditions{
+			//{Cond: &entity.Condition{Filed: "field", OpType: "exists", Value: "book_category_list"}},
+			//{Cond: &entity.Condition{Field: "book_category_list", OpType: consts.ESOpTypeIn, Value: []int64{8, 1}}},
+			{Cond: &entity.Condition{Field: "client_id", OpType: consts.ESOpTypeIn, Value: []int64{1, 2, 3}}},
+		},
+		//MustNot: []entity.Conditions{{Cond: &entity.Condition{Filed: "field", OpType: "exists", Value: "book_category_list"}}},
+		//Cond: &entity.Condition{Filed: "client_id", OpType: "=", Value: 1},
+	}
+	query := entity.ParseToES(conditions)
+	queryParam := &entity.ESQueryParam{
+		Query: query,
+	}
+	queryBytes, _ := json.Marshal(queryParam)
+	log.Println(string(queryBytes))
 	esResp, err := esCli.Search(
-		esCli.Search.WithIndex("api-index"),
+		esCli.Search.WithIndex("book_info"),
 		esCli.Search.WithSize(10),
 		esCli.Search.WithFrom(0),
-		esCli.Search.WithBody(strings.NewReader(query)),
+		esCli.Search.WithBody(strings.NewReader(string(queryBytes))),
+		esCli.Search.WithSort([]string{"author_id:asc"}...),
 	)
 	if err != nil {
 		t.Errorf("err:%#v", err)
