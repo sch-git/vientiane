@@ -147,7 +147,7 @@ func TestAddIndices(t *testing.T) {
 // bulk upsert
 func TestBulkInsert(t *testing.T) {
 	infos := []*es_model.ESBookInfo{
-		{BookId: 100001, BookTitle: "大爱如烟", ClientId: 1, AuthorId: 10011, AccountId: 31, BookCategoryList: []int64{1, 17}, BookCategoryNameList: []string{"现代言情", "总裁豪门"}, BookCreatedAt: "2017-04-14 11:23:59", BookUpdatedAt: "2023-06-01 02:30:00"},
+		{BookId: 100001, BookTitle: "大爱如烟", ClientId: 0, AuthorId: 10011, AccountId: 31, BookCategoryList: []int64{1, 17}, BookCategoryNameList: []string{"现代言情", "总裁豪门"}, BookCreatedAt: "2017-04-14 11:23:59", BookUpdatedAt: "2023-06-01 02:30:00"},
 		{BookId: 100002, BookTitle: "上海上海", ClientId: 1, AuthorId: 10016, AccountId: 36, BookCategoryList: []int64{8, 42}, BookCategoryNameList: []string{"都市人生", "都市高手"}, BookCreatedAt: "2017-04-14 11:39:29", BookUpdatedAt: "2023-06-01 02:30:00"},
 	}
 
@@ -212,7 +212,8 @@ func TestSearch(t *testing.T) {
 		Musts: []entity.Conditions{
 			//{Cond: &entity.Condition{Filed: "field", OpType: "exists", Value: "book_category_list"}},
 			//{Cond: &entity.Condition{Field: "book_category_list", OpType: consts.ESOpTypeIn, Value: []int64{8, 1}}},
-			{Cond: &entity.Condition{Field: "client_id", OpType: consts.ESOpTypeIn, Value: []int64{1, 2, 3}}},
+			{Cond: &entity.Condition{Field: "book_id", OpType: consts.ESOpTypeEq, Value: 100001}},
+			{Cond: &entity.Condition{Field: "book_title", OpType: consts.ESOpTypeEq, Value: "大爱如烟"}},
 		},
 		//MustNot: []entity.Conditions{{Cond: &entity.Condition{Filed: "field", OpType: "exists", Value: "book_category_list"}}},
 		//Cond: &entity.Condition{Filed: "client_id", OpType: "=", Value: 1},

@@ -1,6 +1,9 @@
 package entity
 
-import "vientiane/server/consts"
+import (
+	"fmt"
+	"vientiane/server/consts"
+)
 
 type Condition struct {
 	Field  string      `json:"field"`
@@ -58,7 +61,7 @@ func parseToESParam(conds []Conditions) []map[string]interface{} {
 		}
 		switch cond.Cond.OpType {
 		case consts.ESOpTypeEq:
-			m["match"] = map[string]interface{}{
+			m["term"] = map[string]interface{}{
 				cond.Cond.Field: cond.Cond.Value,
 			}
 		case consts.ESOpTypeExist:
@@ -72,6 +75,10 @@ func parseToESParam(conds []Conditions) []map[string]interface{} {
 		case consts.ESOpTypeGt, consts.ESOpTypeGte, consts.ESOpTypeLt, consts.ESOpTypeLte:
 			m["range"] = map[string]interface{}{
 				cond.Cond.Field: cond.Cond.Value,
+			}
+		case consts.ESOpTypeRegexp:
+			m["regexp"] = map[string]interface{}{
+				cond.Cond.Field: map[string]interface{}{"value": fmt.Sprintf(".*%v.*", cond.Cond.Value), "flags": "ALL"},
 			}
 		}
 		esConds = append(esConds, m)
