@@ -265,7 +265,7 @@ func TestSearch(t *testing.T) {
 		Query:  query,
 	}
 	queryBytes, _ := json.Marshal(map[string]interface{}{"query": query})
-	log.Println(string(queryBytes))
+	//log.Println(string(queryBytes))
 	esResp, err := esCli.Search(
 		esCli.Search.WithIndex("book_info"),
 		esCli.Search.WithSize(10),
