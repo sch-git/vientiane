@@ -9,7 +9,6 @@ import (
 	"log"
 	"strings"
 	"testing"
-	"vientiane/server/consts"
 	"vientiane/server/es_model"
 	"vientiane/server/service/entity"
 )
@@ -149,6 +148,8 @@ func TestBulkInsert(t *testing.T) {
 	infos := []*es_model.ESBookInfo{
 		{BookId: 100001, BookTitle: "大爱如烟", ClientId: 0, AuthorId: 10011, AccountId: 31, BookCategoryList: []int64{1, 17}, BookCategoryNameList: []string{"现代言情", "总裁豪门"}, BookCreatedAt: "2017-04-14 11:23:59", BookUpdatedAt: "2023-06-01 02:30:00"},
 		{BookId: 100002, BookTitle: "上海上海", ClientId: 1, AuthorId: 10016, AccountId: 36, BookCategoryList: []int64{8, 42}, BookCategoryNameList: []string{"都市人生", "都市高手"}, BookCreatedAt: "2017-04-14 11:39:29", BookUpdatedAt: "2023-06-01 02:30:00"},
+		{BookId: 100003, BookTitle: "北京", ClientId: 1, AuthorId: 10017, AccountId: 37, BookCategoryList: []int64{8, 42}, BookCategoryNameList: []string{"都市人生", "都市高手"}, BookCreatedAt: "2017-04-14 11:39:30", BookUpdatedAt: "2023-06-01 02:30:00"},
+		{BookId: 100004, BookTitle: "zHE", ClientId: 1, AuthorId: 10016, AccountId: 36, BookCategoryList: []int64{8, 42}, BookCategoryNameList: []string{"都市人生", "都市高手"}, BookCreatedAt: "2017-04-14 11:39:31", BookUpdatedAt: "2023-06-01 02:30:00"},
 	}
 
 	items := make([]*es_model.ESBulkItem, 0)
@@ -175,6 +176,30 @@ func TestBulkInsert(t *testing.T) {
 	}
 	defer esResp.Body.Close()
 	log.Println(esResp)
+}
+
+func TestBulkDel(t *testing.T) {
+	buf := buffer.Buffer{}
+	buf.WriteString(fmt.Sprintf(`{"delete":{"_index":"%s", "_id":"%s"}}`+"\n", "book_info", "100001"))
+	buf.WriteString(fmt.Sprintf(`{"delete":{"_index":"%s", "_id":"%s"}}`+"\n", "book_info", "100002"))
+	log.Println(buf.String())
+
+	esResp, err := esCli.Bulk(
+		strings.NewReader(buf.String()),
+		esCli.Bulk.WithIndex("book_info"),
+		esCli.Bulk.WithPretty(),
+	)
+	if err != nil {
+		t.Logf("err: %#v", err)
+		return
+	}
+	defer esResp.Body.Close()
+	log.Println(esResp)
+}
+
+// es util bulk
+func TestESUtilBulkInsert(t *testing.T) {
+
 }
 
 // 检索
@@ -209,27 +234,45 @@ func TestSearch(t *testing.T) {
 	//`
 
 	conditions := &entity.Conditions{
-		Musts: []entity.Conditions{
-			//{Cond: &entity.Condition{Filed: "field", OpType: "exists", Value: "book_category_list"}},
-			//{Cond: &entity.Condition{Field: "book_category_list", OpType: consts.ESOpTypeIn, Value: []int64{8, 1}}},
-			{Cond: &entity.Condition{Field: "book_id", OpType: consts.ESOpTypeEq, Value: 100001}},
-			{Cond: &entity.Condition{Field: "book_title", OpType: consts.ESOpTypeEq, Value: "大爱如烟"}},
-		},
+		//Musts: []entity.Conditions{
+		//{Cond: &entity.Condition{Field: "field", OpType: "exists", Value: "book_category_list"}},
+		//{Cond: &entity.Condition{Field: "book_category_list", OpType: consts.ESOpTypeIn, Value: []int64{8, 1}}},
+		//{Cond: &entity.Condition{Field: "book_id", OpType: consts.ESOpTypeEq, Value: 100001}},
+		//{Cond: &entity.Condition{Field: "book_title", OpType: consts.ESOpTypeEq, Value: "大爱如烟"}},
+		//},
+		//Should: []entity.Conditions{
+		//	{
+		//		Musts: []entity.Conditions{
+		//			{Cond: &entity.Condition{Field: "book_id", OpType: consts.ESOpTypeEq, Value: "100001"}},
+		//			{Cond: &entity.Condition{Field: "book_title", OpType: consts.ESOpTypeEq, Value: "大爱如烟"}},
+		//		},
+		//	},
+		//	{
+		//		Cond: &entity.Condition{Field: "book_id", OpType: consts.ESOpTypeEq, Value: "100002"},
+		//	},
+		//},
+		//MustNot: []entity.Conditions{
+		//	{Cond: &entity.Condition{Field: "book_id", OpType: consts.ESOpTypeIn, Value: []string{"100001"}}},
+		//},
 		//MustNot: []entity.Conditions{{Cond: &entity.Condition{Filed: "field", OpType: "exists", Value: "book_category_list"}}},
-		//Cond: &entity.Condition{Filed: "client_id", OpType: "=", Value: 1},
+		//Cond: &entity.Condition{Field: "client_id", OpType: "=", Value: 1},
 	}
+
 	query := entity.ParseToES(conditions)
 	queryParam := &entity.ESQueryParam{
-		Query: query,
+		Source: []string{"book_id"},
+		Sort:   []string{"author_id:asc"},
+		Query:  query,
 	}
-	queryBytes, _ := json.Marshal(queryParam)
+	queryBytes, _ := json.Marshal(map[string]interface{}{"query": query})
 	log.Println(string(queryBytes))
 	esResp, err := esCli.Search(
 		esCli.Search.WithIndex("book_info"),
 		esCli.Search.WithSize(10),
 		esCli.Search.WithFrom(0),
 		esCli.Search.WithBody(strings.NewReader(string(queryBytes))),
-		esCli.Search.WithSort([]string{"author_id:asc"}...),
+		esCli.Search.WithSort(queryParam.Sort...),
+		esCli.Search.WithSource(queryParam.Source...),
 	)
 	if err != nil {
 		t.Errorf("err:%#v", err)

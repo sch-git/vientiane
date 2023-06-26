@@ -22,7 +22,7 @@ type ESQueryParam struct {
 	From   int64             `json:"from,omitempty"`
 	Size   int64             `json:"size,omitempty"`
 	Query  *ESQueryParamBool `json:"query,omitempty"`
-	Sort   string            `json:"sort,omitempty"`
+	Sort   []string          `json:"sort,omitempty"`
 	Source []string          `json:"_source,omitempty"`
 }
 
@@ -56,29 +56,37 @@ func parseToESParam(conds []Conditions) []map[string]interface{} {
 	esConds := make([]map[string]interface{}, 0)
 	for _, cond := range conds {
 		m := make(map[string]interface{})
-		if cond.Cond == nil {
-			continue
+
+		if len(cond.Musts) > 0 || len(cond.Should) > 0 || len(cond.MustNot) > 0 {
+			m["bool"] = &ESBoolQueryParamBool{
+				Filter:  parseToESParam(cond.Musts),
+				Should:  parseToESParam(cond.Should),
+				MustNot: parseToESParam(cond.MustNot),
+			}
 		}
-		switch cond.Cond.OpType {
-		case consts.ESOpTypeEq:
-			m["term"] = map[string]interface{}{
-				cond.Cond.Field: cond.Cond.Value,
-			}
-		case consts.ESOpTypeExist:
-			m["exists"] = map[string]interface{}{
-				cond.Cond.Field: cond.Cond.Value,
-			}
-		case consts.ESOpTypeIn:
-			m["terms"] = map[string]interface{}{
-				cond.Cond.Field: cond.Cond.Value,
-			}
-		case consts.ESOpTypeGt, consts.ESOpTypeGte, consts.ESOpTypeLt, consts.ESOpTypeLte:
-			m["range"] = map[string]interface{}{
-				cond.Cond.Field: cond.Cond.Value,
-			}
-		case consts.ESOpTypeRegexp:
-			m["regexp"] = map[string]interface{}{
-				cond.Cond.Field: map[string]interface{}{"value": fmt.Sprintf(".*%v.*", cond.Cond.Value), "flags": "ALL"},
+
+		if cond.Cond != nil {
+			switch cond.Cond.OpType {
+			case consts.ESOpTypeEq:
+				m["term"] = map[string]interface{}{
+					cond.Cond.Field: cond.Cond.Value,
+				}
+			case consts.ESOpTypeExist:
+				m["exists"] = map[string]interface{}{
+					cond.Cond.Field: cond.Cond.Value,
+				}
+			case consts.ESOpTypeIn:
+				m["terms"] = map[string]interface{}{
+					cond.Cond.Field: cond.Cond.Value,
+				}
+			case consts.ESOpTypeGt, consts.ESOpTypeGte, consts.ESOpTypeLt, consts.ESOpTypeLte:
+				m["range"] = map[string]interface{}{
+					cond.Cond.Field: cond.Cond.Value,
+				}
+			case consts.ESOpTypeRegexp:
+				m["regexp"] = map[string]interface{}{
+					cond.Cond.Field: map[string]interface{}{"value": fmt.Sprintf(".*%v.*", cond.Cond.Value), "flags": "ALL"},
+				}
 			}
 		}
 		esConds = append(esConds, m)
