@@ -260,11 +260,11 @@ func TestSearch(t *testing.T) {
 
 	query := entity.ParseToES(conditions)
 	queryParam := &entity.ESQueryParam{
-		Source: []string{"book_id"},
-		Sort:   []string{"author_id:asc"},
+		Source: []string{"book_id", "book_title"},
+		Sort:   []string{"author_id:asc", "book_title:desc"},
 		Query:  query,
 	}
-	queryBytes, _ := json.Marshal(map[string]interface{}{"query": query})
+	queryBytes, _ := json.Marshal(map[string]interface{}{"query": queryParam.Query})
 	//log.Println(string(queryBytes))
 	esResp, err := esCli.Search(
 		esCli.Search.WithIndex("book_info"),
@@ -280,5 +280,12 @@ func TestSearch(t *testing.T) {
 	}
 	defer esResp.Body.Close()
 
-	t.Log(esResp)
+	queryResp := &es_model.ESSearchResp{}
+	err = json.NewDecoder(esResp.Body).Decode(queryResp)
+	if err != nil {
+		t.Errorf("err:%+v", err)
+		return
+	}
+
+	t.Logf("%+v", queryResp)
 }
