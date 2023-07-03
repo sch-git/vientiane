@@ -48,9 +48,9 @@ func (a *ArticleService) Add(ctx context.Context, article *models.Article) (err 
 		return err
 	}
 
-	err = a.dao.Add(ctx,article,db)
-	if err!=nil{
-		err = fmt.Errorf("%s add article err: %v",fun,err)
+	err = a.dao.Add(ctx, article, db)
+	if err != nil {
+		err = fmt.Errorf("%s add article err: %v", fun, err)
 		return err
 	}
 
@@ -65,9 +65,9 @@ func (a *ArticleService) Del(ctx context.Context, id int64) (err error) {
 		return err
 	}
 
-	err = a.dao.Del(ctx,id,db)
-	if err!=nil{
-		err = fmt.Errorf("%s del article err: %v",fun,err)
+	err = a.dao.Del(ctx, id, db)
+	if err != nil {
+		err = fmt.Errorf("%s del article err: %v", fun, err)
 		return err
 	}
 
@@ -82,9 +82,9 @@ func (a *ArticleService) Update(ctx context.Context, article *models.Article) (e
 		return err
 	}
 
-	err = a.dao.Set(ctx,article,db)
-	if err!=nil{
-		err = fmt.Errorf("%s update article err: %v",fun,err)
+	err = a.dao.Set(ctx, article, db)
+	if err != nil {
+		err = fmt.Errorf("%s update article err: %v", fun, err)
 		return err
 	}
 
