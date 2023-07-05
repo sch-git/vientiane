@@ -62,3 +62,28 @@ func TestAdd(t *testing.T) {
 
 	t.Log("end")
 }
+
+type Ac struct {
+	Name string
+}
+
+func (a *Ac) Empty() bool {
+	if a == nil {
+		return false
+	}
+	return *a == Ac{}
+}
+
+//type Bc struct {
+//	Names []string
+//}
+//
+//func (a Bc) Empty() bool {
+//	return a == Bc{}
+//}
+func TestEmpty(t *testing.T) {
+	var a = &Ac{}
+	//var b = &Bc{}
+	t.Log(a.Empty())
+	//t.Log(b.Empty())
+}
