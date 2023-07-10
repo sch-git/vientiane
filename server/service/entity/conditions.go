@@ -81,7 +81,7 @@ func parseToESParam(conds []Conditions) []map[string]interface{} {
 				}
 			case consts.ESOpTypeGt, consts.ESOpTypeGte, consts.ESOpTypeLt, consts.ESOpTypeLte:
 				m["range"] = map[string]interface{}{
-					cond.Cond.Field: cond.Cond.Value,
+					cond.Cond.Field: map[string]interface{}{cond.Cond.OpType: cond.Cond.Value},
 				}
 			case consts.ESOpTypeRegexp:
 				m["regexp"] = map[string]interface{}{
