@@ -127,6 +127,21 @@ message ArticleMsg {
   Article article = 2;
 }
 
+message CreateIdxReq {
+  string idx_name = 1;
+  string idx_config = 2;
+}
+
+message CreateIdxData {
+
+}
+
+message CreateIdxRes {
+  int64 code = 1;
+  string msg = 2;
+  CreateIdxData data = 3;
+}
+
 
 service VientianeService {
   rpc HealthCheck(HealthCheckReq) returns (HealthCheckRes){};
@@ -137,4 +152,7 @@ service VientianeService {
   rpc ListCategory(ListCategoryReq) returns (ListCategoryRes){};
 
   rpc GetArticle(GetArticleReq) returns (GetArticleRes){};
+
+  // 索引相关接口
+  rpc CreateIdx(CreateIdxReq) returns (CreateIdxRes){};
 }

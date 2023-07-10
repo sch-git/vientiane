@@ -25,6 +25,13 @@ func (s *VientianeServiceImpl) ListCategory(ctx context.Context, req *ListCatego
 	panic("unimplemented func")
 }
 
-func (s *VientianeServiceImpl)GetArticle(ctx context.Context,req *GetArticleReq)(*GetArticleRes,error)  {
-	return HandleVientiane.article.GetArticle(ctx,req),nil
+func (s *VientianeServiceImpl) GetArticle(ctx context.Context, req *GetArticleReq) (*GetArticleRes, error) {
+	return HandleVientiane.article.GetArticle(ctx, req), nil
+}
+
+// es 索引相关操作
+
+func (s *VientianeServiceImpl) CreateIdx(ctx context.Context, req *CreateIdxReq) (*CreateIdxRes, error) {
+	//TODO implement me
+	panic("implement me")
 }
