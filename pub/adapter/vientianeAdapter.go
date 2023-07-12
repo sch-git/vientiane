@@ -100,3 +100,16 @@ func GetArticleByGrpc(ctx context.Context, req *vientiane.GetArticleReq, options
 	res, err = client.GetArticle(ctx, req)
 	return
 }
+
+func CreateIdxByGrpc(ctx context.Context, req *vientiane.CreateIdxReq, options ...grpc.CallOption) (res *vientiane.CreateIdxRes, err error) {
+	fun := "CreateIdxByGrpc-->"
+	client, conn := getClient()
+	defer conn.Close()
+
+	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
+	defer cancel()
+
+	vlog.Info(fun, zap.Any("req", req))
+	res, err = client.CreateIdx(ctx, req)
+	return
+}

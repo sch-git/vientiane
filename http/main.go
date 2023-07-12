@@ -27,6 +27,7 @@ func main() {
 	router.HandleHealth(r, "health")
 	router.HandleAccount(r, "account")
 	router.HandleArticle(r, "article")
+	router.HandleArticle(r, "indices")
 
 	//flag.Parse()
 	//r.Run(":8080")
@@ -34,6 +35,6 @@ func main() {
 	microService := web.NewService(
 		web.Address(":8088"),
 		web.Handler(r),
-		)
+	)
 	microService.Run()
 }
