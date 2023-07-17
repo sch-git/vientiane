@@ -21,8 +21,15 @@ func (i *indexDAO) CreateIndex(ctx context.Context, indexName, config string) (e
 	if indexName == "" || config == "" {
 		return errors.New(fun + "req is nil")
 	}
+
+	getResp, err := i.esClient.Indices.Exists([]string{indexName})
+	if err != nil {
+		return errors.New("index exists")
+	}
+	defer getResp.Body.Close()
+
 	esResp, err := i.esClient.Indices.Create(
-		"book_info",
+		indexName,
 		i.esClient.Indices.Create.WithPretty(),
 		i.esClient.Indices.Create.WithBody(strings.NewReader(config)),
 	)
@@ -35,12 +42,13 @@ func (i *indexDAO) CreateIndex(ctx context.Context, indexName, config string) (e
 
 func NewIndexDAO() IndexDAO {
 	cfg := elasticsearch.Config{
-		Addresses: []string{"https://localhost:9200"},
+		Addresses: []string{"http://localhost:9200"},
 	}
 	es, err := elasticsearch.NewClient(cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Println("new es client -->")
 	return &indexDAO{
 		esClient: es,
 	}
