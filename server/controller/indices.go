@@ -17,14 +17,14 @@ func NewIndicesController() *indicesController {
 	}
 }
 
-func (c *indicesController) CreateIdx(ctx context.Context, req *vientiane.CreateIdxReq) (resp *vientiane.CreateIdxRes, err error) {
+func (c *indicesController) CreateIdx(ctx context.Context, req *vientiane.CreateIdxReq) (resp *vientiane.CreateIdxRes) {
 
-	err = c.indexDAO.CreateIndex(ctx, req.IdxName, req.IdxConfig)
+	err := c.indexDAO.CreateIndex(ctx, req.IdxName, req.IdxConfig)
 	if err != nil {
 		log.Errorf("create index err: %+v", err)
 		resp = &vientiane.CreateIdxRes{
 			Code: -1,
-			Msg:  "create index failed",
+			Msg:  "create index failed:" + err.Error(),
 		}
 		return
 	}

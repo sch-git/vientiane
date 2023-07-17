@@ -32,5 +32,5 @@ func (s *VientianeServiceImpl) GetArticle(ctx context.Context, req *GetArticleRe
 // es 索引相关操作
 
 func (s *VientianeServiceImpl) CreateIdx(ctx context.Context, req *CreateIdxReq) (*CreateIdxRes, error) {
-	return HandleVientiane.indices.CreateIdx(ctx, req)
+	return HandleVientiane.indices.CreateIdx(ctx, req), nil
 }
