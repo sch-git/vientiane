@@ -56,13 +56,12 @@ docker pull wurstmeister/kafka
 ```
 启动 zookeeper、kafka
 ```shell
-docker run -d  --name zookeeper -p 2181:2181 -v /etc/localtime:/etc/localtime wurstmeister/zookeeper
-docker run -d --name kafka -p 9092:9092 \ 
--e KAFKA_BROKER_ID=0 \
--e KAFKA_ZOOKEEPER_CONNECT=172.17.0.2:2181 \
--e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://172.17.0.2:9092 \
--e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092 \
--v /etc/localtime:/etc/localtime \
-wurstmeister/kafka
+docker run -d --name zookeeper -p 2181:2181 -e ALLOW_ANONYMOUS_LOGIN=yes bitnami/zookeeper
+docker run -d --name kafka -p 9092:9092 \
+-e ALLOW_PLAINTEXT_LISTENER=yes \
+-e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092 \
+-e KAFKA_ZOOKEEPER_CONNECT=localhost:2181 \
+-e KAFKA_CREATE_TOPICS=test_topic:1:1 \
+bitnami/kafka
 ```
 ps：使用 docker inspect 查看 zookeeper IPAddress
