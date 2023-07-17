@@ -24,9 +24,12 @@ func (i *indexDAO) CreateIndex(ctx context.Context, indexName, config string) (e
 
 	getResp, err := i.esClient.Indices.Exists([]string{indexName})
 	if err != nil {
-		return errors.New("index exists")
+		return errors.New("get index info err")
 	}
 	defer getResp.Body.Close()
+	if getResp.StatusCode == 200 {
+		return errors.New("index exists")
+	}
 
 	esResp, err := i.esClient.Indices.Create(
 		indexName,

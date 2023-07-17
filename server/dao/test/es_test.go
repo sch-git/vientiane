@@ -289,3 +289,19 @@ func TestSearch(t *testing.T) {
 
 	t.Logf("%+v", queryResp)
 }
+
+func TestExists(t *testing.T) {
+	esResp, err := esCli.Indices.Exists([]string{"book_info", "t_info", "xx"})
+	if err != nil {
+		t.Errorf("err: %+v", err)
+		return
+	}
+
+	var m = make(map[string]interface{})
+	json.NewDecoder(esResp.Body).Decode(&m)
+
+	t.Logf("resp: %+v", esResp)
+	t.Logf("body: %+v", m)
+	t.Logf("code-200: %+v", esResp.StatusCode == 200)
+	t.Logf("code-404: %+v", esResp.StatusCode == 404)
+}
