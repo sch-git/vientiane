@@ -28,9 +28,16 @@ func main() {
 	router.HandleAccount(r, "account")
 	router.HandleArticle(r, "article")
 	router.HandleIndices(r, "indices")
+	router.HandleMonitor(r, "metrics")
 
 	//flag.Parse()
 	//r.Run(":8080")
+	//m := gin.Default()
+	//router.HandleMonitor(m, "metrics")
+	//go func() {
+	//	monitorService := web.NewService(web.Address(":9999"), web.Handler(m))
+	//	monitorService.Run()
+	//}()
 
 	microService := web.NewService(
 		web.Address(":8008"),

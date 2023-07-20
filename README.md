@@ -65,3 +65,23 @@ docker run -d --name kafka -p 9092:9092 \
 bitnami/kafka
 ```
 ps：使用 docker inspect 查看 zookeeper IPAddress
+
+## docker 部署 prometheus
+创建本地 prometheus 配置文件
+```yaml
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9999']
+```
+创建 prometheus 容器;
+使用 -v 参数将本地的 prometheus.yaml 文件挂载到容器内部的 /etc/prometheus/prometheus.yaml 路径。这样，Prometheus 将使用该配置文件进行配置
+```shell
+docker run -d -p 9999:9999 \
+  -v /Users/suchenghao/workspace/mself/vientiane/server/conf/prometheus.yaml:/etc/prometheus/prometheus.yaml \
+  --name prometheus \
+  prom/prometheus
+```
