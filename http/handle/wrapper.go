@@ -42,3 +42,7 @@ var (
 		Name:      "http_cost",
 	}, []string{"cost"})
 )
+
+func init() {
+	prometheus.MustRegister(HttpCost)
+}

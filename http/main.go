@@ -5,6 +5,7 @@ import (
 	"go-micro.dev/v4/web"
 	"go.uber.org/zap"
 	"io"
+	"log"
 	"os"
 	"vientiane/http/router"
 	"vientiane/http/utils"
@@ -28,16 +29,18 @@ func main() {
 	router.HandleAccount(r, "account")
 	router.HandleArticle(r, "article")
 	router.HandleIndices(r, "indices")
-	router.HandleMonitor(r, "metrics")
 
 	//flag.Parse()
 	//r.Run(":8080")
-	//m := gin.Default()
-	//router.HandleMonitor(m, "metrics")
-	//go func() {
-	//	monitorService := web.NewService(web.Address(":9999"), web.Handler(m))
-	//	monitorService.Run()
-	//}()
+	go func() {
+		m := gin.Default()
+		router.HandleMonitor(m, "metrics")
+		monitorService := web.NewService(web.Address(":9910"), web.Handler(m))
+		err := monitorService.Run()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
 
 	microService := web.NewService(
 		web.Address(":8008"),
