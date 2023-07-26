@@ -102,9 +102,9 @@ type HealthCheckRes struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Code int64            `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
-	Msg  string           `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg,omitempty"`
-	Data *HealthCheckData `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	Code int64            `protobuf:"varint,1,opt,name=code,proto3" json:"code"`
+	Msg  string           `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg"`
+	Data *HealthCheckData `protobuf:"bytes,3,opt,name=data,proto3" json:"data"`
 }
 
 func (x *HealthCheckRes) Reset() {
@@ -166,12 +166,12 @@ type Account struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id        int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name      string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Password  string `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
-	Email     string `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`
-	UpdatedAt string `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	CreatedAt string `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	Id        int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id"`
+	Name      string `protobuf:"bytes,2,opt,name=name,proto3" json:"name"`
+	Password  string `protobuf:"bytes,3,opt,name=password,proto3" json:"password"`
+	Email     string `protobuf:"bytes,4,opt,name=email,proto3" json:"email"`
+	UpdatedAt string `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at"`
+	CreatedAt string `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at"`
 }
 
 func (x *Account) Reset() {
@@ -254,10 +254,10 @@ type ListAccountReq struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name   string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Email  string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
-	Limit  int64  `protobuf:"varint,3,opt,name=limit,proto3" json:"limit,omitempty"`
-	Offset int64  `protobuf:"varint,4,opt,name=offset,proto3" json:"offset,omitempty"`
+	Name   string `protobuf:"bytes,1,opt,name=name,proto3" json:"name"`
+	Email  string `protobuf:"bytes,2,opt,name=email,proto3" json:"email"`
+	Limit  int64  `protobuf:"varint,3,opt,name=limit,proto3" json:"limit"`
+	Offset int64  `protobuf:"varint,4,opt,name=offset,proto3" json:"offset"`
 }
 
 func (x *ListAccountReq) Reset() {
@@ -325,9 +325,9 @@ type ListAccountData struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Accounts []*Account `protobuf:"bytes,1,rep,name=accounts,proto3" json:"accounts,omitempty"`
-	Offset   int64      `protobuf:"varint,2,opt,name=offset,proto3" json:"offset,omitempty"`
-	Count    int64      `protobuf:"varint,3,opt,name=count,proto3" json:"count,omitempty"`
+	Accounts []*Account `protobuf:"bytes,1,rep,name=accounts,proto3" json:"accounts"`
+	Offset   int64      `protobuf:"varint,2,opt,name=offset,proto3" json:"offset"`
+	Count    int64      `protobuf:"varint,3,opt,name=count,proto3" json:"count"`
 }
 
 func (x *ListAccountData) Reset() {
@@ -388,9 +388,9 @@ type ListAccountRes struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Code int64            `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
-	Msg  string           `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg,omitempty"`
-	Data *ListAccountData `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	Code int64            `protobuf:"varint,1,opt,name=code,proto3" json:"code"`
+	Msg  string           `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg"`
+	Data *ListAccountData `protobuf:"bytes,3,opt,name=data,proto3" json:"data"`
 }
 
 func (x *ListAccountRes) Reset() {
@@ -452,7 +452,7 @@ type GetAccountReq struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id"`
 }
 
 func (x *GetAccountReq) Reset() {
@@ -499,7 +499,7 @@ type GetAccountData struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Account *Account `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty"`
+	Account *Account `protobuf:"bytes,1,opt,name=account,proto3" json:"account"`
 }
 
 func (x *GetAccountData) Reset() {
@@ -546,9 +546,9 @@ type GetAccountRes struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Code int64           `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
-	Msg  string          `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg,omitempty"`
-	Data *GetAccountData `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	Code int64           `protobuf:"varint,1,opt,name=code,proto3" json:"code"`
+	Msg  string          `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg"`
+	Data *GetAccountData `protobuf:"bytes,3,opt,name=data,proto3" json:"data"`
 }
 
 func (x *GetAccountRes) Reset() {
@@ -610,12 +610,12 @@ type Doc struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id         int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Content    string `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
-	CategoryId int64  `protobuf:"varint,3,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`
-	Author     string `protobuf:"bytes,4,opt,name=author,proto3" json:"author,omitempty"`
-	CreatedAt  string `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt  string `protobuf:"bytes,6,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	Id         int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id"`
+	Content    string `protobuf:"bytes,2,opt,name=content,proto3" json:"content"`
+	CategoryId int64  `protobuf:"varint,3,opt,name=category_id,json=categoryId,proto3" json:"category_id"`
+	Author     string `protobuf:"bytes,4,opt,name=author,proto3" json:"author"`
+	CreatedAt  string `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at"`
+	UpdatedAt  string `protobuf:"bytes,6,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at"`
 }
 
 func (x *Doc) Reset() {
@@ -697,8 +697,8 @@ type Category struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id   int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Id   int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id"`
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name"`
 }
 
 func (x *Category) Reset() {
@@ -752,8 +752,8 @@ type ListCategoryReq struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Offset int64 `protobuf:"varint,1,opt,name=offset,proto3" json:"offset,omitempty"`
-	Limit  int64 `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
+	Offset int64 `protobuf:"varint,1,opt,name=offset,proto3" json:"offset"`
+	Limit  int64 `protobuf:"varint,2,opt,name=limit,proto3" json:"limit"`
 }
 
 func (x *ListCategoryReq) Reset() {
@@ -807,7 +807,7 @@ type ListCategoryData struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Categorys []*Category `protobuf:"bytes,1,rep,name=categorys,proto3" json:"categorys,omitempty"`
+	Categorys []*Category `protobuf:"bytes,1,rep,name=categorys,proto3" json:"categorys"`
 }
 
 func (x *ListCategoryData) Reset() {
@@ -854,9 +854,9 @@ type ListCategoryRes struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Code int64             `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
-	Msg  string            `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg,omitempty"`
-	Data *ListCategoryData `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	Code int64             `protobuf:"varint,1,opt,name=code,proto3" json:"code"`
+	Msg  string            `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg"`
+	Data *ListCategoryData `protobuf:"bytes,3,opt,name=data,proto3" json:"data"`
 }
 
 func (x *ListCategoryRes) Reset() {
@@ -917,10 +917,10 @@ type Article struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id      int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Title   string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
-	Content string `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
-	Author  string `protobuf:"bytes,4,opt,name=author,proto3" json:"author,omitempty"`
+	Id      int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id"`
+	Title   string `protobuf:"bytes,2,opt,name=title,proto3" json:"title"`
+	Content string `protobuf:"bytes,3,opt,name=content,proto3" json:"content"`
+	Author  string `protobuf:"bytes,4,opt,name=author,proto3" json:"author"`
 }
 
 func (x *Article) Reset() {
@@ -988,7 +988,7 @@ type GetArticleReq struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id"`
 }
 
 func (x *GetArticleReq) Reset() {
@@ -1035,7 +1035,7 @@ type GetArticleData struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Article *Article `protobuf:"bytes,1,opt,name=article,proto3" json:"article,omitempty"`
+	Article *Article `protobuf:"bytes,1,opt,name=article,proto3" json:"article"`
 }
 
 func (x *GetArticleData) Reset() {
@@ -1082,9 +1082,9 @@ type GetArticleRes struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Code int64           `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
-	Msg  string          `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg,omitempty"`
-	Data *GetArticleData `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	Code int64           `protobuf:"varint,1,opt,name=code,proto3" json:"code"`
+	Msg  string          `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg"`
+	Data *GetArticleData `protobuf:"bytes,3,opt,name=data,proto3" json:"data"`
 }
 
 func (x *GetArticleRes) Reset() {
@@ -1145,8 +1145,8 @@ type ArticleMsg struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	WriteType string   `protobuf:"bytes,1,opt,name=WriteType,proto3" json:"WriteType,omitempty"`
-	Article   *Article `protobuf:"bytes,2,opt,name=article,proto3" json:"article,omitempty"`
+	WriteType string   `protobuf:"bytes,1,opt,name=WriteType,proto3" json:"WriteType"`
+	Article   *Article `protobuf:"bytes,2,opt,name=article,proto3" json:"article"`
 }
 
 func (x *ArticleMsg) Reset() {
@@ -1200,8 +1200,8 @@ type CreateIdxReq struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	IdxName   string `protobuf:"bytes,1,opt,name=idx_name,json=idxName,proto3" json:"idx_name,omitempty"`
-	IdxConfig string `protobuf:"bytes,2,opt,name=idx_config,json=idxConfig,proto3" json:"idx_config,omitempty"`
+	IdxName   string `protobuf:"bytes,1,opt,name=idx_name,json=idxName,proto3" json:"idx_name"`
+	IdxConfig string `protobuf:"bytes,2,opt,name=idx_config,json=idxConfig,proto3" json:"idx_config"`
 }
 
 func (x *CreateIdxReq) Reset() {
@@ -1293,9 +1293,9 @@ type CreateIdxRes struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Code int64          `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
-	Msg  string         `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg,omitempty"`
-	Data *CreateIdxData `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	Code int64          `protobuf:"varint,1,opt,name=code,proto3" json:"code"`
+	Msg  string         `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg"`
+	Data *CreateIdxData `protobuf:"bytes,3,opt,name=data,proto3" json:"data"`
 }
 
 func (x *CreateIdxRes) Reset() {
