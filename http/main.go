@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"github.com/gin-gonic/gin"
 	"go-micro.dev/v4/web"
 	"go.uber.org/zap"
@@ -40,6 +41,12 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+	}()
+
+	go func() {
+		redisCli, clean := utils.NewRedisClient(context.Background())
+		defer clean()
+		redisCli.Set(context.Background(), "vientiane", "hello world!", 0)
 	}()
 
 	microService := web.NewService(

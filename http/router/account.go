@@ -10,9 +10,10 @@ func HandleAccount(r *gin.Engine, moduleName string) {
 	router := r.Group(moduleName)
 	getRouteConfigs := []RouteConfig{
 		{"/get/:id", handle.BindJsonWrapper(account.FactoryGetAccount)},
+		{"/list", handle.BindJsonWrapper(account.FactoryListAccount)},
 	}
 	postRouteConfigs := []RouteConfig{
-		{"/list", handle.BindJsonWrapper(account.FactoryListAccount)},
+		//{"/list", handle.BindJsonWrapper(account.FactoryListAccount)},
 	}
 
 	for _, conf := range getRouteConfigs {
